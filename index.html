@@ -4,85 +4,210 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlimited Free Universal Pop Wall</title>
-    <!-- Loads Supabase's official real-time library into the browser -->
+    <!-- Loads Supabase's official real-time client library safely inside the browser -->
     <script src="https://jsdelivr.net"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #eef2f3; overflow: hidden; height: 100vh; width: 100vw; }
-        #canvas-wall { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: #eef2f3; 
+            overflow: hidden; 
+            height: 100vh; 
+            width: 100vw; 
+        }
         
-        #control-panel { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; gap: 10px; align-items: center; z-index: 100; }
-        input[type="text"] { border: 1px solid #ccc; padding: 10px 15px; border-radius: 20px; outline: none; width: 250px; font-size: 14px; }
-        .btn { border: 1px solid #ddd; background: #f9f9f9; padding: 10px; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .btn.active { background: #0070f3; color: white; border-color: #0070f3; }
-        #send-btn { background: #ff4757; color: white; border: none; border-radius: 20px; padding: 10px 20px; width: auto; height: auto; cursor: pointer; font-weight: bold; }
-        #send-btn:hover { background: #ff6b81; }
+        /* The main shared open canvas space */
+        #canvas-wall { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            top: 0; 
+            left: 0; 
+            z-index: 1; 
+        }
+        
+        /* Floating bottom configuration dashboard UI */
+        #control-panel { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: white; 
+            padding: 15px 25px; 
+            border-radius: 50px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+            z-index: 100; 
+        }
+        
+        input[type="text"] { 
+            border: 1px solid #ccc; 
+            padding: 10px 15px; 
+            border-radius: 20px; 
+            outline: none; 
+            width: 250px; 
+            font-size: 14px; 
+        }
+        
+        .btn { 
+            border: 1px solid #ddd; 
+            background: #f9f9f9; 
+            padding: 10px; 
+            border-radius: 50%; 
+            width: 40px; 
+            height: 40px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            user-select: none;
+        }
+        
+        .btn.active { 
+            background: #0070f3; 
+            color: white; 
+            border-color: #0070f3; 
+        }
+        
+        #send-btn { 
+            background: #ff4757; 
+            color: white; 
+            border: none; 
+            border-radius: 20px; 
+            padding: 10px 20px; 
+            width: auto; 
+            height: auto; 
+            cursor: pointer; 
+            font-weight: bold; 
+        }
+        
+        #send-btn:hover { 
+            background: #ff6b81; 
+        }
+        
+        #send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
 
-        .popped-msg { position: absolute; background: white; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: move; user-select: none; z-index: 10; font-size: 16px; transform: scale(0); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes popIn { to { transform: scale(1); } }
+        /* Active styling parameters targeting elements arriving over the network */
+        .popped-msg { 
+            position: absolute; 
+            background: white; 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            cursor: default; 
+            user-select: none; 
+            z-index: 10; 
+            font-size: 16px; 
+            transform: scale(0); 
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+        
+        @keyframes popIn { 
+            to { transform: scale(1); } 
+        }
     </style>
 </head>
 <body>
 
+    <!-- Target surface area where messages arrive -->
     <div id="canvas-wall"></div>
 
+    <!-- User Action Controls Panel interface layout -->
     <div id="control-panel">
         <input type="text" id="msg-input" placeholder="Type a message here...">
         <button class="btn" id="b-btn" onclick="toggleStyle('bold')">B</button>
         <button class="btn" id="i-btn" onclick="toggleStyle('italic')">I</button>
         <button class="btn" id="u-btn" onclick="toggleStyle('underline')">U</button>
-        <button id="send-btn" onclick="sendMessage()">POP IT!</button>
+        <button id="send-btn" onclick="sendMessage()" disabled>Connecting...</button>
     </div>
 
     <script>
         const wall = document.getElementById('canvas-wall');
         let currentStyles = { bold: false, italic: false, underline: false };
 
-        // 1. PASTE YOUR UNIQUE SUPABASE CREDENTIALS HERE
+        // =========================================================================
+        // AUTOMATICALLY ASSIGNED INJECTED SUPABASE KEYS SECURE LAYER
+        // =========================================================================
         const SUPABASE_URL = "https://vpzpiylkcjhrrzsvoqxn.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_Diln9djw8ULse9WOBm_rjw_G4SvpFTx";
 
-        // Initialize Supabase Client
+        // Initialize Supabase Client Connection
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 2. Open a permanent real-time WebSocket connection broadcast channel
+        // Configure network delivery rules for global broadcasting layers
         const wallChannel = supabaseClient.channel('global-wall', {
-            config: { broadcast: { ack: false, self: false } }
+            config: { 
+                broadcast: { 
+                    ack: true,   // Verifies data handshake frames over connection lines
+                    self: true   // True allows you to test everything in a single isolated tab window
+                } 
+            }
         });
 
-        // Listen for live broadcast events from other internet users
+        // Event hooks monitoring inbound real-time communication strings
         wallChannel
             .on('broadcast', { event: 'pop-message' }, (response) => {
+                console.log("Inbound layout configurations detected:", response);
                 renderMessage(response.payload);
             })
-            .subscribe();
+            .subscribe((status) => {
+                console.log("WebSocket Connection Hook Status Updated:", status);
+                const sendBtn = document.getElementById('send-btn');
+                
+                // Unlocks action triggers on your screen immediately when handshake updates successfully
+                if (status === "SUBSCRIBED") {
+                    sendBtn.innerText = "POP IT!";
+                    sendBtn.disabled = false;
+                } else {
+                    sendBtn.innerText = "Connecting...";
+                    sendBtn.disabled = true;
+                }
+            });
 
-        // Synthetic browser audio oscillator effect (No audio files required)
+        // Emits synthetic digital popping click sounds using core Web Audio context layers
         function playPopSound() {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(150, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.15);
-            gain.gain.setValueAtTime(0.3, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.15);
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.15);
+                
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch(e) {
+                console.log("Browser policy blocked audio payload frame generation before direct user layout clicks.");
+            }
         }
 
+        // Monitors text-style modifier button states on local interactions
         function toggleStyle(style) {
             currentStyles[style] = !currentStyles[style];
             document.getElementById(`${style}-btn`).classList.toggle('active', currentStyles[style]);
         }
 
+        // Renders visual data blocks directly into the DOM
         function renderMessage(msg) {
             const div = document.createElement('div');
             div.className = 'popped-msg';
             div.innerText = msg.text;
             
-            // Scaled positioning percentage translates smoothly across all display configurations
+            // Percentage boundaries map smoothly over varying screen aspect ratios
             div.style.left = (msg.xPercent * window.innerWidth) + 'px';
             div.style.top = (msg.yPercent * window.innerHeight) + 'px';
             
@@ -94,30 +219,36 @@
             playPopSound();
         }
 
+        // Ships local data packet objects outward across the messaging framework
         async function sendMessage() {
-            const text = document.getElementById('msg-input').value.trim();
-            if(!text) return;
+            const inputField = document.getElementById('msg-input');
+            const text = inputField.value.trim();
+            if (!text) return;
 
+            // Generate relative coordinates instead of raw window pixels
             const xPercent = Math.random() * 0.7 + 0.05; 
             const yPercent = Math.random() * 0.7 + 0.05; 
 
             const payload = {
-                text, xPercent, yPercent,
+                text, 
+                xPercent, 
+                yPercent,
                 bold: currentStyles.bold,
                 italic: currentStyles.italic,
                 underline: currentStyles.underline
             };
 
-            // Broadcast the custom text styling over WebSockets instantly!
+            console.log("Dispatching real-time broadcast transaction packet...", payload);
+
+            // Send payload to everyone connected via WebSocket
             wallChannel.send({
                 type: 'broadcast',
                 event: 'pop-message',
                 payload: payload
             });
 
-            // Draw locally on your screen immediately
-            renderMessage(payload);
-            document.getElementById('msg-input').value = '';
+            // Wipe local string parameters out of input layout instantly
+            inputField.value = '';
         }
     </script>
 </body>
