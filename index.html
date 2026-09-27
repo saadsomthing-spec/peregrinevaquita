@@ -10,18 +10,13 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Universal Pop Wall</title>
+    <title>Family Pop Wall</title>
 
-
-    <!-- Supabase -->
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
-
-    <!-- Your configurable settings -->
     <script src="config.js"></script>
-
 
     <style>
 
@@ -29,147 +24,60 @@
             box-sizing: border-box;
         }
 
-
         html,
         body {
-
             margin: 0;
-
             padding: 0;
-
             width: 100%;
-
             height: 100%;
-
         }
-
 
         body {
-
-            font-family:
-                "Segoe UI",
-                Arial,
-                sans-serif;
-
-            background:
-                #eef2f3;
-
-            overflow:
-                hidden;
-
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #eef2f3;
+            overflow: hidden;
+            transition: background 0.3s ease;
         }
 
-
-        /* ==============================
-           WALL
-        ============================== */
+        body.dark {
+            background: #111827;
+        }
 
         #canvas-wall {
-
-            position:
-                fixed;
-
-            inset:
-                0;
-
-            overflow:
-                hidden;
-
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
         }
-
-
-        /* ==============================
-           STATUS
-        ============================== */
 
         #connection-status {
-
-            position:
-                fixed;
-
-            top:
-                15px;
-
-            left:
-                50%;
-
-            transform:
-                translateX(-50%);
-
-            background:
-                white;
-
-            padding:
-                7px 13px;
-
-            border-radius:
-                20px;
-
-            box-shadow:
-                0 3px 12px
-                rgba(0, 0, 0, 0.12);
-
-            font-size:
-                12px;
-
-            font-weight:
-                600;
-
-            z-index:
-                5000;
-
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 7px 13px;
+            border-radius: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 5000;
         }
 
-
-        /* ==============================
-           MESSAGES
-        ============================== */
-
         .popped-msg {
-
-            position:
-                absolute;
-
-            min-width:
-                50px;
-
-            max-width:
-                350px;
-
-            padding:
-                10px 14px;
-
-            background:
-                white;
-
-            border-radius:
-                10px;
-
-            box-shadow:
-                0 5px 15px
-                rgba(0, 0, 0, 0.14);
-
-            font-size:
-                17px;
-
-            word-break:
-                break-word;
-
-            cursor:
-                grab;
-
-            user-select:
-                none;
-
-            touch-action:
-                none;
-
-            z-index:
-                10;
-
-            transform:
-                scale(0);
-
+            position: absolute;
+            min-width: 50px;
+            max-width: 350px;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.14);
+            font-size: 17px;
+            word-break: break-word;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            z-index: 10;
+            transform: scale(0);
             animation:
                 popIn
                 0.28s
@@ -180,268 +88,217 @@
                     1.275
                 )
                 forwards;
-
         }
-
 
         .popped-msg.dragging {
-
-            cursor:
-                grabbing;
-
-            z-index:
-                1000;
-
+            cursor: grabbing;
+            z-index: 1000;
             box-shadow:
                 0 10px 30px
-                rgba(0, 0, 0, 0.23);
-
+                rgba(0,0,0,0.23);
         }
 
+        .admin-announcement {
+            background: #fff3cd;
+            border: 2px solid #f0b429;
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+        }
 
         @keyframes popIn {
-
             to {
+                transform: scale(1);
+            }
+        }
 
-                transform:
-                    scale(1);
+        @keyframes adminShake {
 
+            0% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-10px);
+            }
+
+            40% {
+                transform: translateX(10px);
+            }
+
+            60% {
+                transform: translateX(-8px);
+            }
+
+            80% {
+                transform: translateX(8px);
+            }
+
+            100% {
+                transform: translateX(0);
             }
 
         }
 
-
-        /* ==============================
-           CONTROL PANEL
-        ============================== */
+        .shake {
+            animation: adminShake 0.5s;
+        }
 
         #control-panel {
-
-            position:
-                fixed;
-
-            left:
-                50%;
-
-            bottom:
-                20px;
-
-            transform:
-                translateX(-50%);
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            gap:
-                8px;
-
-            padding:
-                12px 16px;
-
-            border-radius:
-                30px;
-
-            background:
-                white;
-
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 30px;
+            background: white;
             box-shadow:
                 0 10px 35px
-                rgba(0, 0, 0, 0.18);
-
-            z-index:
-                5000;
-
+                rgba(0,0,0,0.18);
+            z-index: 5000;
         }
-
 
         #msg-input {
-
-            width:
-                270px;
-
-            border:
-                1px solid #d5d5d5;
-
-            border-radius:
-                20px;
-
-            outline:
-                none;
-
-            padding:
-                10px 14px;
-
-            font-size:
-                15px;
-
+            width: 270px;
+            border: 1px solid #d5d5d5;
+            border-radius: 20px;
+            outline: none;
+            padding: 10px 14px;
+            font-size: 15px;
         }
-
-
-        #msg-input:focus {
-
-            border-color:
-                #777;
-
-        }
-
 
         .format-btn {
-
-            width:
-                40px;
-
-            height:
-                40px;
-
-            border-radius:
-                50%;
-
-            border:
-                1px solid #ddd;
-
-            background:
-                #f6f6f6;
-
-            cursor:
-                pointer;
-
-            font-size:
-                16px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: #f6f6f6;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
 
         .format-btn.active {
-
-            background:
-                #222;
-
-            color:
-                white;
-
-            border-color:
-                #222;
-
+            background: #222;
+            color: white;
+            border-color: #222;
         }
-
 
         #send-btn {
-
-            height:
-                40px;
-
-            padding:
-                0 18px;
-
-            border:
-                none;
-
-            border-radius:
-                20px;
-
-            background:
-                #ff4757;
-
-            color:
-                white;
-
-            font-weight:
-                bold;
-
-            cursor:
-                pointer;
-
+            height: 40px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 20px;
+            background: #ff4757;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
         }
-
-
-        #send-btn:hover {
-
-            background:
-                #ff6471;
-
-        }
-
 
         #send-btn:disabled {
-
-            opacity:
-                0.5;
-
-            cursor:
-                not-allowed;
-
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-
-        #sound-btn {
-
-            width:
-                40px;
-
-            height:
-                40px;
-
-            border-radius:
-                50%;
-
-            border:
-                1px solid #ddd;
-
-            background:
-                #f6f6f6;
-
-            cursor:
-                pointer;
-
+        #admin-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 330px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            background: rgba(15,23,42,0.97);
+            color: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow:
+                0 15px 50px
+                rgba(0,0,0,0.35);
+            z-index: 10000;
+            display: none;
         }
 
+        #admin-panel.open {
+            display: block;
+        }
 
-        /* ==============================
-           MOBILE
-        ============================== */
+        #admin-panel h2 {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        #admin-panel p {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 0;
+        }
+
+        .admin-command {
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            background: #1f2937;
+            color: white;
+            text-align: left;
+        }
+
+        .admin-command:hover {
+            background: #374151;
+        }
+
+        .danger {
+            background: #7f1d1d;
+        }
+
+        .danger:hover {
+            background: #991b1b;
+        }
+
+        .admin-input {
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        #admin-close {
+            float: right;
+            background: transparent;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
 
         @media (max-width: 700px) {
 
             #control-panel {
-
-                width:
-                    calc(100% - 20px);
-
-                bottom:
-                    10px;
-
-                padding:
-                    10px;
-
-                border-radius:
-                    18px;
-
-                flex-wrap:
-                    wrap;
-
-                justify-content:
-                    center;
-
+                width: calc(100% - 20px);
+                bottom: 10px;
+                padding: 10px;
+                border-radius: 18px;
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
-
             #msg-input {
+                width: 100%;
+            }
 
-                width:
-                    100%;
-
+            #admin-panel {
+                width: calc(100% - 20px);
+                right: 10px;
             }
 
         }
@@ -450,22 +307,15 @@
 
 </head>
 
-
 <body>
-
 
     <div id="canvas-wall"></div>
 
-
     <div id="connection-status">
-
         Connecting...
-
     </div>
 
-
     <div id="control-panel">
-
 
         <input
             type="text"
@@ -475,18 +325,14 @@
             autocomplete="off"
         >
 
-
         <button
             class="format-btn"
             id="bold-btn"
             type="button"
             onclick="toggleStyle('bold')"
         >
-
             <b>B</b>
-
         </button>
-
 
         <button
             class="format-btn"
@@ -494,11 +340,8 @@
             type="button"
             onclick="toggleStyle('italic')"
         >
-
             <i>I</i>
-
         </button>
-
 
         <button
             class="format-btn"
@@ -506,358 +349,185 @@
             type="button"
             onclick="toggleStyle('underline')"
         >
-
             <u>U</u>
-
         </button>
-
-
-        <button
-            id="sound-btn"
-            type="button"
-            onclick="unlockAudio()"
-            title="Enable sounds"
-        >
-
-            🔊
-
-        </button>
-
 
         <button
             id="send-btn"
             type="button"
             onclick="sendMessage()"
         >
-
             POP IT!
-
         </button>
-
 
     </div>
 
+    <div id="admin-panel">
+
+        <button
+            id="admin-close"
+            onclick="closeAdmin()"
+        >
+            ✕
+        </button>
+
+        <h2>⚡ ADMIN</h2>
+
+        <p>
+            Peregrine Command Center
+        </p>
+
+        <button
+            class="admin-command danger"
+            onclick="adminClearWall()"
+        >
+            1. 🧨 CLEAR WALL
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminLockWall()"
+        >
+            2. 🔒 LOCK WALL
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminUnlockWall()"
+        >
+            3. 🔓 UNLOCK WALL
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminFreezeDragging()"
+        >
+            4. 🧊 FREEZE DRAGGING
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminEnableDragging()"
+        >
+            5. 🖐 ENABLE DRAGGING
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminDarkMode()"
+        >
+            6. 🌙 DARK MODE
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminLightMode()"
+        >
+            7. ☀️ LIGHT MODE
+        </button>
+
+        <input
+            id="admin-announcement-input"
+            class="admin-input"
+            placeholder="Announcement text..."
+        >
+
+        <button
+            class="admin-command"
+            onclick="adminAnnounce()"
+        >
+            8. 📢 ANNOUNCE
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminShakeWall()"
+        >
+            9. 🌪 SHAKE WALL
+        </button>
+
+        <button
+            class="admin-command"
+            onclick="adminRandomize()"
+        >
+            10. 🎲 RANDOMIZE
+        </button>
+
+    </div>
 
     <script>
-
-
-        /* =====================================================
-           ELEMENTS
-        ===================================================== */
 
         const wall =
             document.getElementById(
                 "canvas-wall"
             );
 
-
         const input =
             document.getElementById(
                 "msg-input"
             );
-
 
         const sendButton =
             document.getElementById(
                 "send-btn"
             );
 
-
         const connectionStatus =
             document.getElementById(
                 "connection-status"
             );
 
-
-        /* =====================================================
-           SETTINGS
-        ===================================================== */
-
-        const MAX_MESSAGES =
-
-            Math.max(
-
-                1,
-
-                Number(
-                    window.SUPABASE_CONFIG
-                        ?.MAX_MESSAGES
-                ) || 50
-
+        const adminPanel =
+            document.getElementById(
+                "admin-panel"
             );
-
-
-        console.log(
-            "Maximum wall messages:",
-            MAX_MESSAGES
-        );
-
-
-        /* =====================================================
-           FORMATTING
-        ===================================================== */
 
         let currentStyles = {
 
-            bold:
-                false,
+            bold: false,
 
-            italic:
-                false,
+            italic: false,
 
-            underline:
-                false
+            underline: false
 
         };
 
+        let supabaseClient = null;
 
-        /* =====================================================
-           AUDIO
-        ===================================================== */
+        let wallLocked = false;
 
-        let audioContext =
-            null;
+        let draggingEnabled = true;
 
+        let secretBuffer = "";
 
-        function unlockAudio() {
-
-
-            if (!audioContext) {
-
-
-                audioContext =
-
-                    new (
-
-                        window.AudioContext ||
-
-                        window.webkitAudioContext
-
-                    )();
-
-
-            }
-
-
-            if (
-
-                audioContext.state ===
-                "suspended"
-
-            ) {
-
-
-                audioContext.resume();
-
-
-            }
-
-
-            document
-                .getElementById(
-                    "sound-btn"
-                )
-                .innerText =
-                    "🔊";
-
-
-        }
-
-
-        function playPopSound() {
-
-
-            if (!audioContext) {
-
-                return;
-
-            }
-
-
-            try {
-
-
-                const oscillator =
-                    audioContext
-                        .createOscillator();
-
-
-                const gain =
-                    audioContext
-                        .createGain();
-
-
-                oscillator.type =
-                    "sine";
-
-
-                oscillator
-                    .frequency
-                    .setValueAtTime(
-
-                        180,
-
-                        audioContext
-                            .currentTime
-
-                    );
-
-
-                oscillator
-                    .frequency
-                    .exponentialRampToValueAtTime(
-
-                        650,
-
-                        audioContext
-                            .currentTime +
-                            0.12
-
-                    );
-
-
-                gain
-                    .gain
-                    .setValueAtTime(
-
-                        0.20,
-
-                        audioContext
-                            .currentTime
-
-                    );
-
-
-                gain
-                    .gain
-                    .exponentialRampToValueAtTime(
-
-                        0.001,
-
-                        audioContext
-                            .currentTime +
-                            0.12
-
-                    );
-
-
-                oscillator.connect(
-                    gain
-                );
-
-
-                gain.connect(
-                    audioContext.destination
-                );
-
-
-                oscillator.start();
-
-
-                oscillator.stop(
-
-                    audioContext
-                        .currentTime +
-                        0.12
-
-                );
-
-
-            }
-
-            catch (error) {
-
-
-                console.warn(
-
-                    "Could not play sound:",
-
-                    error
-
-                );
-
-
-            }
-
-
-        }
-
-
-        document.addEventListener(
-
-            "pointerdown",
-
-            unlockAudio,
-
-            {
-                once:
-                    true
-            }
-
-        );
-
-
-        /* =====================================================
-           SUPABASE
-        ===================================================== */
-
-        let supabaseClient =
-            null;
+        const ADMIN_SECRET =
+            "peregrinefalcsonissohandsome";
 
 
         function initializeSupabase() {
 
-
             if (
-
                 typeof supabase ===
                 "undefined"
-
             ) {
 
-
-                connectionStatus
-                    .innerText =
+                connectionStatus.innerText =
                     "Supabase failed";
 
-
-                console.error(
-                    "Supabase library failed."
-                );
-
-
                 return false;
-
-
             }
-
 
             if (
-
                 !window.SUPABASE_CONFIG ||
-
                 !window.SUPABASE_CONFIG.URL ||
-
                 !window.SUPABASE_CONFIG.ANON_KEY
-
             ) {
 
-
-                connectionStatus
-                    .innerText =
-                    "Missing config.js";
-
-
-                console.error(
-                    "Supabase config missing."
-                );
-
+                connectionStatus.innerText =
+                    "Missing config";
 
                 return false;
-
-
             }
-
 
             supabaseClient =
                 supabase.createClient(
@@ -872,293 +542,218 @@
 
                 );
 
-
             return true;
+        }
 
+
+        document.addEventListener(
+
+            "keydown",
+
+            function(event) {
+
+                if (
+                    event.key.length === 1
+                ) {
+
+                    secretBuffer +=
+                        event.key
+                            .toLowerCase();
+
+                    if (
+                        secretBuffer.length >
+                        ADMIN_SECRET.length
+                    ) {
+
+                        secretBuffer =
+                            secretBuffer.slice(
+                                -ADMIN_SECRET.length
+                            );
+
+                    }
+
+                    if (
+                        secretBuffer ===
+                        ADMIN_SECRET
+                    ) {
+
+                        openAdmin();
+
+                        secretBuffer = "";
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+        function openAdmin() {
+
+            adminPanel
+                .classList
+                .add(
+                    "open"
+                );
 
         }
 
 
-        /* =====================================================
-           STYLE BUTTONS
-        ===================================================== */
+        function closeAdmin() {
 
-        function toggleStyle(
-            style
-        ) {
+            adminPanel
+                .classList
+                .remove(
+                    "open"
+                );
 
+        }
+
+
+        function toggleStyle(style) {
 
             currentStyles[style] =
                 !currentStyles[style];
 
-
-            const button =
-
-                document
-                    .getElementById(
-
-                        style +
-                        "-btn"
-
-                    );
-
-
-            if (button) {
-
-
-                button
-                    .classList
-                    .toggle(
-
-                        "active",
-
-                        currentStyles[
-                            style
-                        ]
-
-                    );
-
-
-            }
-
+            document
+                .getElementById(
+                    style + "-btn"
+                )
+                .classList
+                .toggle(
+                    "active",
+                    currentStyles[style]
+                );
 
         }
 
 
-        /* =====================================================
-           POSITION HELPERS
-        ===================================================== */
-
         function clamp(
-
             value,
-
-            minimum,
-
-            maximum
-
+            min,
+            max
         ) {
 
-
             return Math.min(
-
                 Math.max(
                     value,
-                    minimum
+                    min
                 ),
-
-                maximum
-
+                max
             );
-
 
         }
 
 
         function updateElementPosition(
-
             id,
-
             xPercent,
-
             yPercent
-
         ) {
 
-
             const element =
-
                 document
                     .getElementById(
                         id
                     );
 
-
             if (!element) {
-
                 return;
-
             }
-
 
             element.dataset.xPercent =
                 xPercent;
 
-
             element.dataset.yPercent =
                 yPercent;
 
-
             const maxX =
-
                 Math.max(
-
                     0,
-
                     window.innerWidth -
                     element.offsetWidth
-
                 );
-
 
             const maxY =
-
                 Math.max(
-
                     0,
-
                     window.innerHeight -
                     element.offsetHeight
-
                 );
-
-
-            const x =
-
-                clamp(
-
-                    xPercent *
-                    window.innerWidth,
-
-                    0,
-
-                    maxX
-
-                );
-
-
-            const y =
-
-                clamp(
-
-                    yPercent *
-                    window.innerHeight,
-
-                    0,
-
-                    maxY
-
-                );
-
 
             element.style.left =
-                x + "px";
-
+                clamp(
+                    xPercent *
+                    window.innerWidth,
+                    0,
+                    maxX
+                ) + "px";
 
             element.style.top =
-                y + "px";
-
+                clamp(
+                    yPercent *
+                    window.innerHeight,
+                    0,
+                    maxY
+                ) + "px";
 
         }
 
 
-        /* =====================================================
-           RENDER
-        ===================================================== */
-
         function renderMessage(
-
-            message,
-
-            silent = false
-
+            message
         ) {
 
-
-            const existing =
-
-                document
-                    .getElementById(
-                        message.id
-                    );
-
-
-            if (existing) {
-
-
-                updateElementPosition(
-
-                    message.id,
-
-                    message.xPercent,
-
-                    message.yPercent
-
-                );
-
+            if (
+                document.getElementById(
+                    message.id
+                )
+            ) {
 
                 return;
-
-
             }
 
-
             const element =
-
                 document
                     .createElement(
                         "div"
                     );
 
-
             element.className =
                 "popped-msg";
-
 
             element.id =
                 message.id;
 
-
             element.innerText =
                 message.text;
 
+            if (message.bold) {
 
-            if (
-                message.bold
-            ) {
-
-
-                element
-                    .style
-                    .fontWeight =
+                element.style.fontWeight =
                     "bold";
 
-
             }
 
+            if (message.italic) {
 
-            if (
-                message.italic
-            ) {
-
-
-                element
-                    .style
-                    .fontStyle =
+                element.style.fontStyle =
                     "italic";
 
-
             }
 
+            if (message.underline) {
 
-            if (
-                message.underline
-            ) {
-
-
-                element
-                    .style
-                    .textDecoration =
+                element.style.textDecoration =
                     "underline";
 
-
             }
-
 
             wall.appendChild(
                 element
             );
-
 
             updateElementPosition(
 
@@ -1170,49 +765,748 @@
 
             );
 
-
             setupElementDraggability(
                 element
             );
 
-
-            if (!silent) {
-
-
-                playPopSound();
+        }
 
 
+        async function sendMessage() {
+
+            if (wallLocked) {
+
+                alert(
+                    "The wall is currently locked by admin."
+                );
+
+                return;
             }
 
+            const text =
+                input.value.trim();
+
+            if (!text) {
+                return;
+            }
+
+            const payload = {
+
+                id:
+                    "pop_" +
+                    crypto.randomUUID(),
+
+                text:
+                    text,
+
+                xPercent:
+                    Math.random() *
+                    0.65 +
+                    0.05,
+
+                yPercent:
+                    Math.random() *
+                    0.60 +
+                    0.05,
+
+                bold:
+                    currentStyles.bold,
+
+                italic:
+                    currentStyles.italic,
+
+                underline:
+                    currentStyles.underline
+
+            };
+
+            renderMessage(
+                payload
+            );
+
+            input.value =
+                "";
+
+            const {
+                error
+            } = await supabaseClient
+
+                .from(
+                    "pops"
+                )
+
+                .insert({
+
+                    id:
+                        payload.id,
+
+                    text:
+                        payload.text,
+
+                    x_percent:
+                        payload.xPercent,
+
+                    y_percent:
+                        payload.yPercent,
+
+                    bold:
+                        payload.bold,
+
+                    italic:
+                        payload.italic,
+
+                    underline:
+                        payload.underline
+
+                });
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+            }
 
         }
 
 
-        /* =====================================================
-           DATABASE POSITION
-        ===================================================== */
-
-        async function syncPosition(
-
-            id,
-
-            xPercent,
-
-            yPercent
-
+        function setupElementDraggability(
+            element
         ) {
 
+            let dragging =
+                false;
 
-            if (!supabaseClient) {
+            let offsetX =
+                0;
+
+            let offsetY =
+                0;
+
+            element.addEventListener(
+
+                "pointerdown",
+
+                function(event) {
+
+                    if (
+                        !draggingEnabled
+                    ) {
+
+                        return;
+
+                    }
+
+                    dragging =
+                        true;
+
+                    const rect =
+                        element
+                            .getBoundingClientRect();
+
+                    offsetX =
+                        event.clientX -
+                        rect.left;
+
+                    offsetY =
+                        event.clientY -
+                        rect.top;
+
+                    element
+                        .setPointerCapture(
+                            event.pointerId
+                        );
+
+                }
+
+            );
+
+            element.addEventListener(
+
+                "pointermove",
+
+                async function(event) {
+
+                    if (
+                        !dragging ||
+                        !draggingEnabled
+                    ) {
+
+                        return;
+
+                    }
+
+                    const x =
+                        clamp(
+
+                            event.clientX -
+                            offsetX,
+
+                            0,
+
+                            window.innerWidth -
+                            element.offsetWidth
+
+                        );
+
+                    const y =
+                        clamp(
+
+                            event.clientY -
+                            offsetY,
+
+                            0,
+
+                            window.innerHeight -
+                            element.offsetHeight
+
+                        );
+
+                    const xPercent =
+                        x /
+                        window.innerWidth;
+
+                    const yPercent =
+                        y /
+                        window.innerHeight;
+
+                    element.style.left =
+                        x + "px";
+
+                    element.style.top =
+                        y + "px";
+
+                    element.dataset.xPercent =
+                        xPercent;
+
+                    element.dataset.yPercent =
+                        yPercent;
+
+                }
+
+            );
+
+            element.addEventListener(
+
+                "pointerup",
+
+                async function(event) {
+
+                    if (!dragging) {
+                        return;
+                    }
+
+                    dragging =
+                        false;
+
+                    const xPercent =
+                        Number(
+                            element.dataset.xPercent
+                        );
+
+                    const yPercent =
+                        Number(
+                            element.dataset.yPercent
+                        );
+
+                    await supabaseClient
+
+                        .from(
+                            "pops"
+                        )
+
+                        .update({
+
+                            x_percent:
+                                xPercent,
+
+                            y_percent:
+                                yPercent
+
+                        })
+
+                        .eq(
+                            "id",
+                            element.id
+                        );
+
+                }
+
+            );
+
+        }
+
+
+        async function loadExistingPops() {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from(
+                    "pops"
+                )
+
+                .select(
+                    "*"
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            true
+                    }
+                );
+
+            if (error) {
+
+                console.error(
+                    error
+                );
 
                 return;
-
             }
 
+            data.forEach(
+
+                function(pop) {
+
+                    renderMessage({
+
+                        id:
+                            pop.id,
+
+                        text:
+                            pop.text,
+
+                        xPercent:
+                            pop.x_percent,
+
+                        yPercent:
+                            pop.y_percent,
+
+                        bold:
+                            pop.bold,
+
+                        italic:
+                            pop.italic,
+
+                        underline:
+                            pop.underline
+
+                    });
+
+                }
+
+            );
+
+        }
+
+
+        function startRealtime() {
+
+            supabaseClient
+
+                .channel(
+                    "wall"
+                )
+
+                .on(
+
+                    "postgres_changes",
+
+                    {
+
+                        event:
+                            "INSERT",
+
+                        schema:
+                            "public",
+
+                        table:
+                            "pops"
+
+                    },
+
+                    function(payload) {
+
+                        const pop =
+                            payload.new;
+
+                        renderMessage({
+
+                            id:
+                                pop.id,
+
+                            text:
+                                pop.text,
+
+                            xPercent:
+                                pop.x_percent,
+
+                            yPercent:
+                                pop.y_percent,
+
+                            bold:
+                                pop.bold,
+
+                            italic:
+                                pop.italic,
+
+                            underline:
+                                pop.underline
+
+                        });
+
+                    }
+
+                )
+
+                .on(
+
+                    "postgres_changes",
+
+                    {
+
+                        event:
+                            "UPDATE",
+
+                        schema:
+                            "public",
+
+                        table:
+                            "pops"
+
+                    },
+
+                    function(payload) {
+
+                        const pop =
+                            payload.new;
+
+                        updateElementPosition(
+
+                            pop.id,
+
+                            pop.x_percent,
+
+                            pop.y_percent
+
+                        );
+
+                    }
+
+                )
+
+                .on(
+
+                    "postgres_changes",
+
+                    {
+
+                        event:
+                            "DELETE",
+
+                        schema:
+                            "public",
+
+                        table:
+                            "pops"
+
+                    },
+
+                    function(payload) {
+
+                        const pop =
+                            payload.old;
+
+                        const element =
+                            document
+                                .getElementById(
+                                    pop.id
+                                );
+
+                        if (element) {
+
+                            element.remove();
+
+                        }
+
+                    }
+
+                )
+
+                .subscribe(
+
+                    function(status) {
+
+                        if (
+                            status ===
+                            "SUBSCRIBED"
+                        ) {
+
+                            connectionStatus
+                                .innerText =
+                                "● LIVE";
+
+                        }
+
+                    }
+
+                );
+
+        }
+
+
+        async function adminClearWall() {
+
+            const confirmed =
+                confirm(
+                    "Clear every message?"
+                );
+
+            if (!confirmed) {
+                return;
+            }
 
             const {
                 error
-            } =
+            } = await supabaseClient
+
+                .from(
+                    "pops"
+                )
+
+                .delete()
+
+                .neq(
+                    "id",
+                    ""
+                );
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+
+        function adminLockWall() {
+
+            wallLocked =
+                true;
+
+            sendButton.disabled =
+                true;
+
+            sendButton.innerText =
+                "LOCKED";
+
+        }
+
+
+        function adminUnlockWall() {
+
+            wallLocked =
+                false;
+
+            sendButton.disabled =
+                false;
+
+            sendButton.innerText =
+                "POP IT!";
+
+        }
+
+
+        function adminFreezeDragging() {
+
+            draggingEnabled =
+                false;
+
+        }
+
+
+        function adminEnableDragging() {
+
+            draggingEnabled =
+                true;
+
+        }
+
+
+        function adminDarkMode() {
+
+            document.body
+                .classList
+                .add(
+                    "dark"
+                );
+
+        }
+
+
+        function adminLightMode() {
+
+            document.body
+                .classList
+                .remove(
+                    "dark"
+                );
+
+        }
+
+
+        async function adminAnnounce() {
+
+            const announcementInput =
+                document
+                    .getElementById(
+                        "admin-announcement-input"
+                    );
+
+            const text =
+                announcementInput
+                    .value
+                    .trim();
+
+            if (!text) {
+                return;
+            }
+
+            const payload = {
+
+                id:
+                    "pop_" +
+                    crypto.randomUUID(),
+
+                text:
+                    "📢 " + text,
+
+                xPercent:
+                    0.30,
+
+                yPercent:
+                    0.10,
+
+                bold:
+                    true,
+
+                italic:
+                    false,
+
+                underline:
+                    false
+
+            };
+
+            await supabaseClient
+
+                .from(
+                    "pops"
+                )
+
+                .insert({
+
+                    id:
+                        payload.id,
+
+                    text:
+                        payload.text,
+
+                    x_percent:
+                        payload.xPercent,
+
+                    y_percent:
+                        payload.yPercent,
+
+                    bold:
+                        true,
+
+                    italic:
+                        false,
+
+                    underline:
+                        false
+
+                });
+
+            announcementInput.value =
+                "";
+
+        }
+
+
+        function adminShakeWall() {
+
+            const messages =
+                document
+                    .querySelectorAll(
+                        ".popped-msg"
+                    );
+
+            messages.forEach(
+
+                function(element) {
+
+                    element.classList
+                        .remove(
+                            "shake"
+                        );
+
+                    void element.offsetWidth;
+
+                    element.classList
+                        .add(
+                            "shake"
+                        );
+
+                }
+
+            );
+
+        }
+
+
+        async function adminRandomize() {
+
+            const messages =
+                document
+                    .querySelectorAll(
+                        ".popped-msg"
+                    );
+
+            for (
+                const element
+                of messages
+            ) {
+
+                const xPercent =
+                    Math.random() *
+                    0.70 +
+                    0.05;
+
+                const yPercent =
+                    Math.random() *
+                    0.65 +
+                    0.05;
+
+                updateElementPosition(
+
+                    element.id,
+
+                    xPercent,
+
+                    yPercent
+
+                );
 
                 await supabaseClient
 
@@ -1232,1224 +1526,54 @@
 
                     .eq(
                         "id",
-                        id
+                        element.id
                     );
 
-
-            if (error) {
-
-
-                console.error(
-
-                    "Position update failed:",
-
-                    error
-
-                );
-
-
             }
-
 
         }
 
-
-        /* =====================================================
-           DRAGGING
-        ===================================================== */
-
-        function setupElementDraggability(
-            element
-        ) {
-
-
-            let dragging =
-                false;
-
-
-            let offsetX =
-                0;
-
-
-            let offsetY =
-                0;
-
-
-            let lastSyncTime =
-                0;
-
-
-            element.addEventListener(
-
-                "pointerdown",
-
-                function (event) {
-
-
-                    dragging =
-                        true;
-
-
-                    element
-                        .classList
-                        .add(
-                            "dragging"
-                        );
-
-
-                    element
-                        .setPointerCapture(
-                            event.pointerId
-                        );
-
-
-                    const rect =
-
-                        element
-                            .getBoundingClientRect();
-
-
-                    offsetX =
-
-                        event.clientX -
-                        rect.left;
-
-
-                    offsetY =
-
-                        event.clientY -
-                        rect.top;
-
-
-                    event.preventDefault();
-
-
-                }
-
-            );
-
-
-            element.addEventListener(
-
-                "pointermove",
-
-                function (event) {
-
-
-                    if (!dragging) {
-
-                        return;
-
-                    }
-
-
-                    const maxX =
-
-                        Math.max(
-
-                            0,
-
-                            window.innerWidth -
-                            element.offsetWidth
-
-                        );
-
-
-                    const maxY =
-
-                        Math.max(
-
-                            0,
-
-                            window.innerHeight -
-                            element.offsetHeight
-
-                        );
-
-
-                    const newX =
-
-                        clamp(
-
-                            event.clientX -
-                            offsetX,
-
-                            0,
-
-                            maxX
-
-                        );
-
-
-                    const newY =
-
-                        clamp(
-
-                            event.clientY -
-                            offsetY,
-
-                            0,
-
-                            maxY
-
-                        );
-
-
-                    const xPercent =
-
-                        newX /
-                        window.innerWidth;
-
-
-                    const yPercent =
-
-                        newY /
-                        window.innerHeight;
-
-
-                    element.style.left =
-                        newX + "px";
-
-
-                    element.style.top =
-                        newY + "px";
-
-
-                    element.dataset.xPercent =
-                        xPercent;
-
-
-                    element.dataset.yPercent =
-                        yPercent;
-
-
-                    const now =
-                        Date.now();
-
-
-                    if (
-
-                        now -
-                        lastSyncTime >=
-                        100
-
-                    ) {
-
-
-                        lastSyncTime =
-                            now;
-
-
-                        syncPosition(
-
-                            element.id,
-
-                            xPercent,
-
-                            yPercent
-
-                        );
-
-
-                    }
-
-
-                }
-
-            );
-
-
-            async function finishDrag(
-                event
-            ) {
-
-
-                if (!dragging) {
-
-                    return;
-
-                }
-
-
-                dragging =
-                    false;
-
-
-                element
-                    .classList
-                    .remove(
-                        "dragging"
-                    );
-
-
-                try {
-
-
-                    if (
-
-                        element
-                            .hasPointerCapture(
-                                event.pointerId
-                            )
-
-                    ) {
-
-
-                        element
-                            .releasePointerCapture(
-                                event.pointerId
-                            );
-
-
-                    }
-
-
-                }
-
-                catch (error) {
-
-                }
-
-
-                const xPercent =
-
-                    Number(
-                        element
-                            .dataset
-                            .xPercent
-                    );
-
-
-                const yPercent =
-
-                    Number(
-                        element
-                            .dataset
-                            .yPercent
-                    );
-
-
-                await syncPosition(
-
-                    element.id,
-
-                    xPercent,
-
-                    yPercent
-
-                );
-
-
-            }
-
-
-            element.addEventListener(
-
-                "pointerup",
-
-                finishDrag
-
-            );
-
-
-            element.addEventListener(
-
-                "pointercancel",
-
-                finishDrag
-
-            );
-
-
-        }
-
-
-        /* =====================================================
-           DELETE OLD MESSAGES
-        ===================================================== */
-
-        async function trimOldMessages() {
-
-
-            if (!supabaseClient) {
-
-                return;
-
-            }
-
-
-            /*
-                Find messages older than the
-                configured MAX_MESSAGES amount.
-            */
-
-            const {
-                data,
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .select(
-                        "id, created_at"
-                    )
-
-                    .order(
-                        "created_at",
-                        {
-                            ascending:
-                                false
-                        }
-                    );
-
-
-            if (error) {
-
-
-                console.error(
-
-                    "Could not check old messages:",
-
-                    error
-
-                );
-
-
-                return;
-
-
-            }
-
-
-            if (
-
-                data.length <=
-                MAX_MESSAGES
-
-            ) {
-
-
-                return;
-
-
-            }
-
-
-            const messagesToDelete =
-
-                data.slice(
-                    MAX_MESSAGES
-                );
-
-
-            const idsToDelete =
-
-                messagesToDelete.map(
-
-                    function (message) {
-
-                        return message.id;
-
-                    }
-
-                );
-
-
-            console.log(
-
-                "Removing old messages:",
-
-                idsToDelete.length
-
-            );
-
-
-            const {
-                error:
-                    deleteError
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .delete()
-
-                    .in(
-                        "id",
-                        idsToDelete
-                    );
-
-
-            if (deleteError) {
-
-
-                console.error(
-
-                    "Could not delete old messages:",
-
-                    deleteError
-
-                );
-
-
-            }
-
-
-        }
-
-
-        /* =====================================================
-           SEND MESSAGE
-        ===================================================== */
-
-        async function sendMessage() {
-
-
-            const text =
-                input
-                    .value
-                    .trim();
-
-
-            if (!text) {
-
-                return;
-
-            }
-
-
-            unlockAudio();
-
-
-            const id =
-
-                "pop_" +
-                crypto.randomUUID();
-
-
-            const payload = {
-
-
-                id:
-                    id,
-
-
-                text:
-                    text,
-
-
-                xPercent:
-
-                    Math.random() *
-                    0.65 +
-                    0.05,
-
-
-                yPercent:
-
-                    Math.random() *
-                    0.60 +
-                    0.05,
-
-
-                bold:
-
-                    currentStyles.bold,
-
-
-                italic:
-
-                    currentStyles.italic,
-
-
-                underline:
-
-                    currentStyles.underline
-
-
-            };
-
-
-            renderMessage(
-                payload
-            );
-
-
-            input.value =
-                "";
-
-
-            if (!supabaseClient) {
-
-
-                console.error(
-                    "Supabase unavailable."
-                );
-
-
-                return;
-
-
-            }
-
-
-            const {
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .insert({
-
-
-                        id:
-                            payload.id,
-
-
-                        text:
-                            payload.text,
-
-
-                        x_percent:
-                            payload.xPercent,
-
-
-                        y_percent:
-                            payload.yPercent,
-
-
-                        bold:
-                            payload.bold,
-
-
-                        italic:
-                            payload.italic,
-
-
-                        underline:
-                            payload.underline
-
-
-                    });
-
-
-            if (error) {
-
-
-                console.error(
-
-                    "Insert failed:",
-
-                    error
-
-                );
-
-
-                alert(
-
-                    "Message appeared locally but could not save."
-
-                );
-
-
-                return;
-
-
-            }
-
-
-            /*
-                After saving the new message,
-                enforce MAX_MESSAGES.
-            */
-
-            await trimOldMessages();
-
-
-        }
-
-
-        /* =====================================================
-           LOAD EXISTING
-        ===================================================== */
-
-        async function loadExistingPops() {
-
-
-            const {
-                data,
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .select(
-                        "*"
-                    )
-
-                    .order(
-                        "created_at",
-                        {
-                            ascending:
-                                true
-                        }
-                    )
-
-                    .limit(
-                        MAX_MESSAGES
-                    );
-
-
-            if (error) {
-
-
-                console.error(
-
-                    "Could not load pops:",
-
-                    error
-
-                );
-
-
-                return;
-
-
-            }
-
-
-            for (
-                const pop of data
-            ) {
-
-
-                renderMessage(
-
-
-                    {
-
-
-                        id:
-                            pop.id,
-
-
-                        text:
-                            pop.text,
-
-
-                        xPercent:
-                            pop.x_percent,
-
-
-                        yPercent:
-                            pop.y_percent,
-
-
-                        bold:
-                            pop.bold,
-
-
-                        italic:
-                            pop.italic,
-
-
-                        underline:
-                            pop.underline
-
-
-                    },
-
-
-                    true
-
-
-                );
-
-
-            }
-
-
-        }
-
-
-        /* =====================================================
-           REALTIME
-        ===================================================== */
-
-        function startRealtime() {
-
-
-            supabaseClient
-
-                .channel(
-                    "universal-pop-wall"
-                )
-
-
-                /* ==========================
-                   INSERT
-                ========================== */
-
-                .on(
-
-
-                    "postgres_changes",
-
-
-                    {
-
-
-                        event:
-                            "INSERT",
-
-
-                        schema:
-                            "public",
-
-
-                        table:
-                            "pops"
-
-
-                    },
-
-
-                    function (payload) {
-
-
-                        const pop =
-                            payload.new;
-
-
-                        renderMessage({
-
-
-                            id:
-                                pop.id,
-
-
-                            text:
-                                pop.text,
-
-
-                            xPercent:
-                                pop.x_percent,
-
-
-                            yPercent:
-                                pop.y_percent,
-
-
-                            bold:
-                                pop.bold,
-
-
-                            italic:
-                                pop.italic,
-
-
-                            underline:
-                                pop.underline
-
-
-                        });
-
-
-                    }
-
-
-                )
-
-
-                /* ==========================
-                   UPDATE
-                ========================== */
-
-                .on(
-
-
-                    "postgres_changes",
-
-
-                    {
-
-
-                        event:
-                            "UPDATE",
-
-
-                        schema:
-                            "public",
-
-
-                        table:
-                            "pops"
-
-
-                    },
-
-
-                    function (payload) {
-
-
-                        const pop =
-                            payload.new;
-
-
-                        updateElementPosition(
-
-
-                            pop.id,
-
-
-                            pop.x_percent,
-
-
-                            pop.y_percent
-
-
-                        );
-
-
-                    }
-
-
-                )
-
-
-                /* ==========================
-                   DELETE
-                ========================== */
-
-                .on(
-
-
-                    "postgres_changes",
-
-
-                    {
-
-
-                        event:
-                            "DELETE",
-
-
-                        schema:
-                            "public",
-
-
-                        table:
-                            "pops"
-
-
-                    },
-
-
-                    function (payload) {
-
-
-                        const deleted =
-                            payload.old;
-
-
-                        const element =
-
-                            document
-                                .getElementById(
-                                    deleted.id
-                                );
-
-
-                        if (element) {
-
-
-                            element.remove();
-
-
-                        }
-
-
-                    }
-
-
-                )
-
-
-                /* ==========================
-                   CONNECTION
-                ========================== */
-
-                .subscribe(
-
-
-                    function (status) {
-
-
-                        console.log(
-
-                            "Realtime status:",
-
-                            status
-
-                        );
-
-
-                        if (
-
-                            status ===
-                            "SUBSCRIBED"
-
-                        ) {
-
-
-                            connectionStatus
-                                .innerText =
-                                "● LIVE";
-
-
-                        }
-
-
-                        else if (
-
-                            status ===
-                            "CHANNEL_ERROR"
-
-                        ) {
-
-
-                            connectionStatus
-                                .innerText =
-                                "Realtime error";
-
-
-                        }
-
-
-                        else if (
-
-                            status ===
-                            "TIMED_OUT"
-
-                        ) {
-
-
-                            connectionStatus
-                                .innerText =
-                                "Connection timed out";
-
-
-                        }
-
-
-                        else if (
-
-                            status ===
-                            "CLOSED"
-
-                        ) {
-
-
-                            connectionStatus
-                                .innerText =
-                                "Disconnected";
-
-
-                        }
-
-
-                    }
-
-
-                );
-
-
-        }
-
-
-        /* =====================================================
-           ENTER KEY
-        ===================================================== */
 
         input.addEventListener(
 
-
             "keydown",
 
-
-            function (event) {
-
+            function(event) {
 
                 if (
-
                     event.key ===
                     "Enter"
-
                 ) {
-
 
                     sendMessage();
 
-
                 }
 
-
             }
-
 
         );
 
-
-        /* =====================================================
-           WINDOW RESIZE
-        ===================================================== */
-
-        window.addEventListener(
-
-
-            "resize",
-
-
-            function () {
-
-
-                const messages =
-
-                    document
-                        .querySelectorAll(
-                            ".popped-msg"
-                        );
-
-
-                messages.forEach(
-
-
-                    function (element) {
-
-
-                        const xPercent =
-
-                            Number(
-
-                                element
-                                    .dataset
-                                    .xPercent
-
-                            );
-
-
-                        const yPercent =
-
-                            Number(
-
-                                element
-                                    .dataset
-                                    .yPercent
-
-                            );
-
-
-                        updateElementPosition(
-
-
-                            element.id,
-
-
-                            xPercent,
-
-
-                            yPercent
-
-
-                        );
-
-
-                    }
-
-
-                );
-
-
-            }
-
-
-        );
-
-
-        /* =====================================================
-           START APPLICATION
-        ===================================================== */
 
         async function startApp() {
 
-
-            const success =
-                initializeSupabase();
-
-
-            if (!success) {
-
-
-                sendButton.disabled =
-                    true;
-
+            if (
+                !initializeSupabase()
+            ) {
 
                 return;
 
-
             }
-
-
-            connectionStatus
-                .innerText =
-                "Loading wall...";
-
-
-            /*
-                Clean the database first,
-                according to config.js.
-            */
-
-            await trimOldMessages();
-
-
-            /*
-                Load remaining messages.
-            */
 
             await loadExistingPops();
 
-
-            /*
-                Connect realtime.
-            */
-
             startRealtime();
-
 
         }
 
 
         startApp();
 
-
     </script>
-
 
 </body>
 
