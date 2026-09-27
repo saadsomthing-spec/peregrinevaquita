@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -10,13 +11,20 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Family Pop Wall</title>
+    <title>
+        Family Pop Wall
+    </title>
+
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
-    <script src="config.js"></script>
+
+    <script
+        src="config.js"
+    ></script>
+
 
     <style>
 
@@ -24,15 +32,23 @@
             box-sizing: border-box;
         }
 
+
         html,
         body {
+
             margin: 0;
+
             padding: 0;
+
             width: 100%;
+
             height: 100%;
+
         }
 
+
         body {
+
             font-family:
                 "Segoe UI",
                 Arial,
@@ -45,20 +61,26 @@
                 hidden;
 
             transition:
-                background 0.3s ease;
+                background
+                0.3s ease;
+
         }
+
 
         body.dark {
+
             background:
                 #111827;
+
         }
 
 
-        /* =====================================================
+        /* ============================================
            WALL
-        ===================================================== */
+        ============================================ */
 
         #canvas-wall {
+
             position:
                 fixed;
 
@@ -67,14 +89,16 @@
 
             overflow:
                 hidden;
+
         }
 
 
-        /* =====================================================
-           CONNECTION STATUS
-        ===================================================== */
+        /* ============================================
+           LIVE STATUS
+        ============================================ */
 
         #connection-status {
+
             position:
                 fixed;
 
@@ -98,7 +122,12 @@
 
             box-shadow:
                 0 3px 12px
-                rgba(0,0,0,0.12);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.12
+                );
 
             font-size:
                 12px;
@@ -108,14 +137,16 @@
 
             z-index:
                 5000;
+
         }
 
 
-        /* =====================================================
+        /* ============================================
            MESSAGES
-        ===================================================== */
+        ============================================ */
 
         .popped-msg {
+
             position:
                 absolute;
 
@@ -136,7 +167,12 @@
 
             box-shadow:
                 0 5px 15px
-                rgba(0,0,0,0.14);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.14
+                );
 
             font-size:
                 17px;
@@ -169,71 +205,28 @@
                     1.275
                 )
                 forwards;
+
         }
 
-        .popped-msg.dragging {
-            cursor:
-                grabbing;
-
-            z-index:
-                1000;
-        }
 
         @keyframes popIn {
 
             to {
+
                 transform:
                     scale(1);
+
             }
 
         }
 
-        @keyframes adminShake {
 
-            0% {
-                transform:
-                    translateX(0);
-            }
-
-            20% {
-                transform:
-                    translateX(-12px);
-            }
-
-            40% {
-                transform:
-                    translateX(12px);
-            }
-
-            60% {
-                transform:
-                    translateX(-8px);
-            }
-
-            80% {
-                transform:
-                    translateX(8px);
-            }
-
-            100% {
-                transform:
-                    translateX(0);
-            }
-
-        }
-
-        .shake {
-            animation:
-                adminShake
-                0.5s;
-        }
-
-
-        /* =====================================================
+        /* ============================================
            NORMAL CONTROL PANEL
-        ===================================================== */
+        ============================================ */
 
         #control-panel {
+
             position:
                 fixed;
 
@@ -258,26 +251,35 @@
             padding:
                 12px 16px;
 
-            border-radius:
-                30px;
-
             background:
                 white;
 
+            border-radius:
+                30px;
+
             box-shadow:
                 0 10px 35px
-                rgba(0,0,0,0.18);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.18
+                );
 
             z-index:
                 5000;
+
         }
 
+
         #msg-input {
+
             width:
                 270px;
 
             border:
-                1px solid #d5d5d5;
+                1px solid
+                #d5d5d5;
 
             border-radius:
                 20px;
@@ -290,9 +292,12 @@
 
             font-size:
                 15px;
+
         }
 
+
         .format-btn {
+
             width:
                 40px;
 
@@ -303,7 +308,8 @@
                 50%;
 
             border:
-                1px solid #ddd;
+                1px solid
+                #ddd;
 
             background:
                 #f6f6f6;
@@ -314,28 +320,22 @@
             font-size:
                 16px;
 
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
         }
 
+
         .format-btn.active {
+
             background:
                 #222;
 
             color:
                 white;
 
-            border-color:
-                #222;
         }
 
+
         #send-btn {
+
             height:
                 40px;
 
@@ -359,22 +359,16 @@
 
             cursor:
                 pointer;
-        }
 
-        #send-btn:disabled {
-            opacity:
-                0.5;
-
-            cursor:
-                not-allowed;
         }
 
 
-        /* =====================================================
-           ADMIN PANEL
-        ===================================================== */
+        /* ============================================
+           ADMIN CONSOLE
+        ============================================ */
 
         #admin-panel {
+
             position:
                 fixed;
 
@@ -385,41 +379,53 @@
                 20px;
 
             width:
-                350px;
-
-            padding:
-                20px;
+                360px;
 
             background:
-                rgba(15, 23, 42, 0.98);
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.98
+                );
 
             color:
                 white;
 
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
+            padding:
+                20px;
 
             border-radius:
                 18px;
 
             box-shadow:
                 0 20px 60px
-                rgba(0,0,0,0.4);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.45
+                );
+
+            display:
+                none;
 
             z-index:
                 10000;
 
-            display:
-                none;
         }
+
 
         #admin-panel.open {
+
             display:
                 block;
+
         }
 
-        #admin-title-row {
+
+        #admin-header {
+
             display:
                 flex;
 
@@ -431,22 +437,17 @@
 
             margin-bottom:
                 15px;
+
         }
 
-        #admin-title {
-            font-size:
-                20px;
-
-            font-weight:
-                800;
-        }
 
         #admin-close {
-            border:
-                none;
 
             background:
                 transparent;
+
+            border:
+                none;
 
             color:
                 white;
@@ -456,9 +457,12 @@
 
             cursor:
                 pointer;
+
         }
 
+
         .admin-label {
+
             display:
                 block;
 
@@ -468,37 +472,25 @@
             margin-bottom:
                 6px;
 
+            color:
+                #94a3b8;
+
             font-size:
                 12px;
 
             font-weight:
                 bold;
 
-            color:
-                #94a3b8;
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                1px;
         }
 
+
         .admin-input {
+
             width:
                 100%;
 
             padding:
-                11px 12px;
-
-            border:
-                1px solid #334155;
-
-            border-radius:
-                10px;
-
-            outline:
-                none;
+                11px;
 
             background:
                 #0f172a;
@@ -506,21 +498,26 @@
             color:
                 white;
 
-            font-size:
-                14px;
+            border:
+                1px solid
+                #334155;
+
+            border-radius:
+                10px;
+
+            outline:
+                none;
+
         }
 
-        .admin-input:focus {
-            border-color:
-                #38bdf8;
-        }
 
         #admin-run {
+
             width:
                 100%;
 
             margin-top:
-                16px;
+                15px;
 
             padding:
                 12px;
@@ -542,23 +539,26 @@
 
             cursor:
                 pointer;
+
         }
 
+
         #admin-output {
+
             margin-top:
                 14px;
 
             padding:
                 10px;
 
-            min-height:
-                38px;
+            border-radius:
+                10px;
 
             background:
                 #020617;
 
-            border-radius:
-                10px;
+            color:
+                #86efac;
 
             font-family:
                 monospace;
@@ -566,51 +566,44 @@
             font-size:
                 12px;
 
-            color:
-                #86efac;
         }
 
 
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media (max-width: 700px) {
+        @media (
+            max-width: 700px
+        ) {
 
             #control-panel {
+
                 width:
-                    calc(100% - 20px);
-
-                bottom:
-                    10px;
-
-                padding:
-                    10px;
+                    calc(
+                        100% - 20px
+                    );
 
                 flex-wrap:
                     wrap;
 
-                justify-content:
-                    center;
-
-                border-radius:
-                    18px;
             }
+
 
             #msg-input {
+
                 width:
                     100%;
+
             }
 
+
             #admin-panel {
+
                 width:
-                    calc(100% - 20px);
+                    calc(
+                        100% - 20px
+                    );
 
                 right:
                     10px;
 
-                top:
-                    60px;
             }
 
         }
@@ -619,30 +612,34 @@
 
 </head>
 
+
 <body>
 
 
-    <div id="canvas-wall"></div>
+    <div
+        id="canvas-wall"
+    ></div>
 
 
-    <div id="connection-status">
+    <div
+        id="connection-status"
+    >
         Connecting...
     </div>
 
 
-    <!-- =====================================================
-         NORMAL USER UI
-    ====================================================== -->
-
-    <div id="control-panel">
+    <div
+        id="control-panel"
+    >
 
         <input
-            type="text"
             id="msg-input"
+            type="text"
             maxlength="500"
             placeholder="Type something..."
             autocomplete="off"
         >
+
 
         <button
             class="format-btn"
@@ -652,6 +649,7 @@
             <b>B</b>
         </button>
 
+
         <button
             class="format-btn"
             id="italic-btn"
@@ -660,6 +658,7 @@
             <i>I</i>
         </button>
 
+
         <button
             class="format-btn"
             id="underline-btn"
@@ -667,6 +666,7 @@
         >
             <u>U</u>
         </button>
+
 
         <button
             id="send-btn"
@@ -678,17 +678,22 @@
     </div>
 
 
-    <!-- =====================================================
-         SECRET ADMIN UI
-    ====================================================== -->
+    <!-- ============================================
+         ADMIN PANEL
+    ============================================= -->
 
-    <div id="admin-panel">
+    <div
+        id="admin-panel"
+    >
 
-        <div id="admin-title-row">
+        <div
+            id="admin-header"
+        >
 
-            <div id="admin-title">
+            <strong>
                 ⚡ ADMIN CONSOLE
-            </div>
+            </strong>
+
 
             <button
                 id="admin-close"
@@ -700,47 +705,33 @@
         </div>
 
 
-        <label class="admin-label">
+        <label
+            class="admin-label"
+        >
             Command
         </label>
+
 
         <input
             id="admin-command-input"
             class="admin-input"
             list="admin-command-list"
-            placeholder="Type or select command..."
+            placeholder="Select command..."
             autocomplete="off"
         >
 
 
-        <datalist id="admin-command-list">
-
-            <option value="clear-wall"></option>
-
-            <option value="lock-wall"></option>
-
-            <option value="unlock-wall"></option>
-
-            <option value="freeze-dragging"></option>
-
-            <option value="enable-dragging"></option>
-
-            <option value="dark-mode"></option>
-
-            <option value="light-mode"></option>
-
-            <option value="announce"></option>
-
-            <option value="shake-wall"></option>
-
-            <option value="randomize"></option>
-
-        </datalist>
+        <datalist
+            id="admin-command-list"
+        ></datalist>
 
 
-        <label class="admin-label">
+        <label
+            class="admin-label"
+        >
             Value
         </label>
+
 
         <input
             id="admin-value-input"
@@ -758,54 +749,57 @@
         </button>
 
 
-        <div id="admin-output">
-            Ready.
+        <div
+            id="admin-output"
+        >
+            Loading commands...
         </div>
 
     </div>
 
 
-    <script>
+    <script type="module">
 
 
-        /* =====================================================
-           REFERENCES
-        ===================================================== */
+        /* ============================================
+           GLOBAL REFERENCES
+        ============================================ */
 
         const wall =
             document.getElementById(
                 "canvas-wall"
             );
 
+
         const input =
             document.getElementById(
                 "msg-input"
             );
 
-        const sendButton =
-            document.getElementById(
-                "send-btn"
-            );
 
         const connectionStatus =
             document.getElementById(
                 "connection-status"
             );
 
+
         const adminPanel =
             document.getElementById(
                 "admin-panel"
             );
+
 
         const adminCommandInput =
             document.getElementById(
                 "admin-command-input"
             );
 
+
         const adminValueInput =
             document.getElementById(
                 "admin-value-input"
             );
+
 
         const adminOutput =
             document.getElementById(
@@ -813,59 +807,262 @@
             );
 
 
-        /* =====================================================
-           SECRET
-        ===================================================== */
+        const adminCommandList =
+            document.getElementById(
+                "admin-command-list"
+            );
+
+
+        /* ============================================
+           ADMIN PASSWORD
+        ============================================ */
 
         const ADMIN_SECRET =
             "peregrinefalcsonissohandsome";
 
 
-        /* =====================================================
-           SETTINGS
-        ===================================================== */
-
-        const MAX_MESSAGES =
-            Math.max(
-                1,
-                Number(
-                    window
-                        .SUPABASE_CONFIG
-                        ?.MAX_MESSAGES
-                ) || 50
-            );
-
-
-        /* =====================================================
-           STATE
-        ===================================================== */
+        /* ============================================
+           APP STATE
+        ============================================ */
 
         let supabaseClient =
             null;
 
-        let wallLocked =
-            false;
 
-        let draggingEnabled =
-            true;
+        let realtimeChannel =
+            null;
+
 
         let currentStyles = {
 
-            bold:
-                false,
+            bold: false,
 
-            italic:
-                false,
+            italic: false,
 
-            underline:
-                false
+            underline: false
 
         };
 
 
-        /* =====================================================
-           SECRET INPUT DETECTOR
-        ===================================================== */
+        /*
+            This Map contains ALL dynamically
+            discovered admin commands.
+
+            Example:
+
+            adminCommands.get("shake-wall")
+        */
+
+        const adminCommands =
+            new Map();
+
+
+        /* ============================================
+           SUPABASE INITIALIZATION
+        ============================================ */
+
+        function initializeSupabase() {
+
+
+            supabaseClient =
+                window.supabase
+                    .createClient(
+
+                        window
+                            .SUPABASE_CONFIG
+                            .URL,
+
+                        window
+                            .SUPABASE_CONFIG
+                            .ANON_KEY
+
+                    );
+
+
+        }
+
+
+        /* ============================================
+           ADMIN FUNCTION LOADER
+        ============================================ */
+
+        async function loadAdminFunctions() {
+
+
+            adminOutput.innerText =
+                "Scanning ADMIN-FUNCTION...";
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+
+                        "/api/admin-functions",
+
+                        {
+                            cache:
+                                "no-store"
+                        }
+
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    !result.success
+                ) {
+
+                    throw new Error(
+                        result.error
+                    );
+
+                }
+
+
+                adminCommands.clear();
+
+
+                adminCommandList.innerHTML =
+                    "";
+
+
+                for (
+                    const file
+                    of result.files
+                ) {
+
+
+                    try {
+
+
+                        const module =
+                            await import(
+
+                                `/ADMIN-FUNCTION/${file}?v=${Date.now()}`
+
+                            );
+
+
+                        if (
+                            typeof module.command !==
+                            "object"
+                        ) {
+
+                            console.warn(
+
+                                file,
+
+                                "does not export command."
+
+                            );
+
+
+                            continue;
+
+                        }
+
+
+                        if (
+                            !module.command.name ||
+                            typeof module.command.run !==
+                            "function"
+                        ) {
+
+                            console.warn(
+
+                                file,
+
+                                "has an invalid command format."
+
+                            );
+
+
+                            continue;
+
+                        }
+
+
+                        adminCommands.set(
+
+                            module.command.name,
+
+                            module.command
+
+                        );
+
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        option.value =
+                            module.command.name;
+
+
+                        adminCommandList
+                            .appendChild(
+                                option
+                            );
+
+
+                    }
+
+                    catch (error) {
+
+
+                        console.error(
+
+                            "Could not load:",
+
+                            file,
+
+                            error
+
+                        );
+
+
+                    }
+
+
+                }
+
+
+                adminOutput.innerText =
+
+                    `${adminCommands.size} commands loaded.`;
+
+
+            }
+
+            catch (error) {
+
+
+                console.error(
+                    error
+                );
+
+
+                adminOutput.innerText =
+
+                    "Could not load admin commands.";
+
+
+            }
+
+
+        }
+
+
+        /* ============================================
+           SECRET ADMIN DETECTION
+        ============================================ */
 
         input.addEventListener(
 
@@ -873,24 +1070,16 @@
 
             function() {
 
-                const typed =
-                    input.value
-                        .trim()
-                        .toLowerCase();
-
 
                 if (
-                    typed ===
+
+                    input.value
+                        .trim()
+                        .toLowerCase() ===
                     ADMIN_SECRET
+
                 ) {
 
-                    /*
-                        IMPORTANT:
-
-                        Delete the secret from the normal
-                        message field BEFORE anything
-                        can send it.
-                    */
 
                     input.value =
                         "";
@@ -898,76 +1087,17 @@
 
                     openAdmin();
 
+
                 }
+
 
             }
 
         );
 
-
-        /*
-            Extra Enter protection.
-
-            Even if the browser has not fired
-            the input event for some unusual reason,
-            Enter can NEVER submit the secret.
-        */
-
-        input.addEventListener(
-
-            "keydown",
-
-            function(event) {
-
-                if (
-                    event.key !==
-                    "Enter"
-                ) {
-
-                    return;
-
-                }
-
-
-                const typed =
-                    input.value
-                        .trim()
-                        .toLowerCase();
-
-
-                if (
-                    typed ===
-                    ADMIN_SECRET
-                ) {
-
-                    event.preventDefault();
-
-                    event.stopPropagation();
-
-                    input.value =
-                        "";
-
-                    openAdmin();
-
-                    return;
-
-                }
-
-
-                event.preventDefault();
-
-                sendMessage();
-
-            }
-
-        );
-
-
-        /* =====================================================
-           ADMIN OPEN / CLOSE
-        ===================================================== */
 
         function openAdmin() {
+
 
             adminPanel
                 .classList
@@ -975,30 +1105,16 @@
                     "open"
                 );
 
-            adminCommandInput.value =
-                "";
 
-            adminValueInput.value =
-                "";
+            adminCommandInput
+                .focus();
 
-            setAdminOutput(
-                "Admin access granted."
-            );
-
-            setTimeout(
-                function() {
-
-                    adminCommandInput
-                        .focus();
-
-                },
-                50
-            );
 
         }
 
 
         function closeAdmin() {
+
 
             adminPanel
                 .classList
@@ -1006,86 +1122,284 @@
                     "open"
                 );
 
+
+        }
+
+
+        /* ============================================
+           RUN ADMIN COMMAND
+        ============================================ */
+
+        async function runAdminCommand() {
+
+
+            const name =
+                adminCommandInput
+                    .value
+                    .trim();
+
+
+            const value =
+                adminValueInput
+                    .value
+                    .trim();
+
+
+            const command =
+                adminCommands.get(
+                    name
+                );
+
+
+            if (!command) {
+
+
+                adminOutput.innerText =
+                    "Unknown command.";
+
+
+                return;
+
+
+            }
+
+
+            adminOutput.innerText =
+                `Running ${name}...`;
+
+
+            try {
+
+
+                /*
+                    Every command receives this
+                    shared context object.
+                */
+
+                const context = {
+
+                    value:
+                        value,
+
+
+                    wall:
+                        wall,
+
+
+                    supabase:
+                        supabaseClient,
+
+
+                    channel:
+                        realtimeChannel,
+
+
+                    broadcast:
+                        broadcastAdminCommand,
+
+
+                    output:
+                        function(message) {
+
+                            adminOutput.innerText =
+                                message;
+
+                        },
+
+
+                    getMessages:
+                        function() {
+
+                            return document
+                                .querySelectorAll(
+                                    ".popped-msg"
+                                );
+
+                        }
+
+                };
+
+
+                await command.run(
+                    context
+                );
+
+
+                if (
+                    adminOutput.innerText ===
+                    `Running ${name}...`
+                ) {
+
+
+                    adminOutput.innerText =
+                        `${name} completed.`;
+
+
+                }
+
+
+            }
+
+            catch (error) {
+
+
+                console.error(
+                    error
+                );
+
+
+                adminOutput.innerText =
+                    `ERROR: ${error.message}`;
+
+
+            }
+
+
             adminCommandInput.value =
                 "";
+
 
             adminValueInput.value =
                 "";
 
-            input.focus();
 
         }
 
 
-        function setAdminOutput(
-            message
+        /* ============================================
+           UNIVERSAL COMMAND BROADCAST
+        ============================================ */
+
+        async function broadcastAdminCommand(
+
+            command,
+
+            payload = {}
+
         ) {
 
-            adminOutput.innerText =
-                message;
+
+            await realtimeChannel
+                .send({
+
+                    type:
+                        "broadcast",
+
+                    event:
+                        "admin-plugin-command",
+
+                    payload: {
+
+                        command:
+                            command,
+
+                        data:
+                            payload
+
+                    }
+
+                });
+
 
         }
 
 
-        /* =====================================================
-           SUPABASE
-        ===================================================== */
+        /* ============================================
+           RECEIVE UNIVERSAL COMMAND
+        ============================================ */
 
-        function initializeSupabase() {
+        async function receiveAdminCommand(
+            response
+        ) {
+
+
+            const name =
+                response
+                    .payload
+                    ?.command;
+
+
+            const data =
+                response
+                    .payload
+                    ?.data;
+
+
+            const command =
+                adminCommands.get(
+                    name
+                );
+
 
             if (
-                typeof supabase ===
-                "undefined"
+                !command ||
+                typeof command.receive !==
+                "function"
             ) {
 
-                connectionStatus.innerText =
-                    "Supabase failed";
-
-                return false;
+                return;
 
             }
 
 
-            if (
-                !window.SUPABASE_CONFIG ||
-                !window.SUPABASE_CONFIG.URL ||
-                !window.SUPABASE_CONFIG.ANON_KEY
-            ) {
+            try {
 
-                connectionStatus.innerText =
-                    "Missing config.js";
 
-                return false;
+                await command.receive({
+
+                    data:
+                        data,
+
+
+                    wall:
+                        wall,
+
+
+                    supabase:
+                        supabaseClient,
+
+
+                    getMessages:
+                        function() {
+
+                            return document
+                                .querySelectorAll(
+                                    ".popped-msg"
+                                );
+
+                        }
+
+                });
+
 
             }
 
+            catch (error) {
 
-            supabaseClient =
-                supabase.createClient(
 
-                    window
-                        .SUPABASE_CONFIG
-                        .URL,
+                console.error(
 
-                    window
-                        .SUPABASE_CONFIG
-                        .ANON_KEY
+                    `Remote command ${name} failed:`,
+
+                    error
 
                 );
 
 
-            return true;
+            }
+
 
         }
 
 
-        /* =====================================================
-           STYLE
-        ===================================================== */
+        /* ============================================
+           STYLE BUTTONS
+        ============================================ */
 
         function toggleStyle(
             style
         ) {
+
 
             currentStyles[style] =
                 !currentStyles[style];
@@ -1093,7 +1407,10 @@
 
             document
                 .getElementById(
-                    style + "-btn"
+
+                    style +
+                    "-btn"
+
                 )
                 .classList
                 .toggle(
@@ -1106,128 +1423,24 @@
 
                 );
 
-        }
-
-
-        /* =====================================================
-           POSITION
-        ===================================================== */
-
-        function clamp(
-            value,
-            min,
-            max
-        ) {
-
-            return Math.min(
-                Math.max(
-                    value,
-                    min
-                ),
-                max
-            );
 
         }
 
 
-        function updateElementPosition(
-
-            id,
-
-            xPercent,
-
-            yPercent
-
-        ) {
-
-            const element =
-                document
-                    .getElementById(
-                        id
-                    );
-
-
-            if (!element) {
-
-                return;
-
-            }
-
-
-            element.dataset.xPercent =
-                xPercent;
-
-            element.dataset.yPercent =
-                yPercent;
-
-
-            const maxX =
-                Math.max(
-                    0,
-                    window.innerWidth -
-                    element.offsetWidth
-                );
-
-            const maxY =
-                Math.max(
-                    0,
-                    window.innerHeight -
-                    element.offsetHeight
-                );
-
-
-            const x =
-                clamp(
-                    xPercent *
-                    window.innerWidth,
-                    0,
-                    maxX
-                );
-
-            const y =
-                clamp(
-                    yPercent *
-                    window.innerHeight,
-                    0,
-                    maxY
-                );
-
-
-            element.style.left =
-                x + "px";
-
-            element.style.top =
-                y + "px";
-
-        }
-
-
-        /* =====================================================
-           RENDER
-        ===================================================== */
+        /* ============================================
+           RENDER MESSAGE
+        ============================================ */
 
         function renderMessage(
             message
         ) {
 
-            const existing =
-                document
-                    .getElementById(
-                        message.id
-                    );
 
-
-            if (existing) {
-
-                updateElementPosition(
-
-                    message.id,
-
-                    message.xPercent,
-
-                    message.yPercent
-
-                );
+            if (
+                document.getElementById(
+                    message.id
+                )
+            ) {
 
                 return;
 
@@ -1235,23 +1448,42 @@
 
 
             const element =
-                document
-                    .createElement(
-                        "div"
-                    );
+                document.createElement(
+                    "div"
+                );
 
 
             element.className =
                 "popped-msg";
 
+
             element.id =
                 message.id;
+
 
             element.innerText =
                 message.text;
 
 
-            if (message.bold) {
+            element.style.left =
+                (
+                    message.xPercent *
+                    window.innerWidth
+                ) +
+                "px";
+
+
+            element.style.top =
+                (
+                    message.yPercent *
+                    window.innerHeight
+                ) +
+                "px";
+
+
+            if (
+                message.bold
+            ) {
 
                 element.style.fontWeight =
                     "bold";
@@ -1259,7 +1491,9 @@
             }
 
 
-            if (message.italic) {
+            if (
+                message.italic
+            ) {
 
                 element.style.fontStyle =
                     "italic";
@@ -1267,7 +1501,9 @@
             }
 
 
-            if (message.underline) {
+            if (
+                message.underline
+            ) {
 
                 element.style.textDecoration =
                     "underline";
@@ -1280,42 +1516,32 @@
             );
 
 
-            updateElementPosition(
-
-                message.id,
-
-                message.xPercent,
-
-                message.yPercent
-
-            );
-
-
-            setupElementDraggability(
+            makeDraggable(
                 element
             );
+
 
         }
 
 
-        /* =====================================================
+        /* ============================================
            DRAGGING
-        ===================================================== */
+        ============================================ */
 
-        function setupElementDraggability(
+        function makeDraggable(
             element
         ) {
+
 
             let dragging =
                 false;
 
+
             let offsetX =
                 0;
 
-            let offsetY =
-                0;
 
-            let lastSync =
+            let offsetY =
                 0;
 
 
@@ -1325,30 +1551,9 @@
 
                 function(event) {
 
-                    if (
-                        !draggingEnabled
-                    ) {
-
-                        return;
-
-                    }
-
 
                     dragging =
                         true;
-
-
-                    element
-                        .classList
-                        .add(
-                            "dragging"
-                        );
-
-
-                    element
-                        .setPointerCapture(
-                            event.pointerId
-                        );
 
 
                     const rect =
@@ -1360,12 +1565,17 @@
                         event.clientX -
                         rect.left;
 
+
                     offsetY =
                         event.clientY -
                         rect.top;
 
 
-                    event.preventDefault();
+                    element
+                        .setPointerCapture(
+                            event.pointerId
+                        );
+
 
                 }
 
@@ -1378,10 +1588,8 @@
 
                 function(event) {
 
-                    if (
-                        !dragging ||
-                        !draggingEnabled
-                    ) {
+
+                    if (!dragging) {
 
                         return;
 
@@ -1389,81 +1597,24 @@
 
 
                     const x =
-                        clamp(
-
-                            event.clientX -
-                            offsetX,
-
-                            0,
-
-                            window.innerWidth -
-                            element.offsetWidth
-
-                        );
+                        event.clientX -
+                        offsetX;
 
 
                     const y =
-                        clamp(
-
-                            event.clientY -
-                            offsetY,
-
-                            0,
-
-                            window.innerHeight -
-                            element.offsetHeight
-
-                        );
-
-
-                    const xPercent =
-                        x /
-                        window.innerWidth;
-
-                    const yPercent =
-                        y /
-                        window.innerHeight;
+                        event.clientY -
+                        offsetY;
 
 
                     element.style.left =
-                        x + "px";
+                        x +
+                        "px";
+
 
                     element.style.top =
-                        y + "px";
+                        y +
+                        "px";
 
-
-                    element.dataset.xPercent =
-                        xPercent;
-
-                    element.dataset.yPercent =
-                        yPercent;
-
-
-                    const now =
-                        Date.now();
-
-
-                    if (
-                        now -
-                        lastSync >
-                        100
-                    ) {
-
-                        lastSync =
-                            now;
-
-
-                        syncPosition(
-
-                            element.id,
-
-                            xPercent,
-
-                            yPercent
-
-                        );
-
-                    }
 
                 }
 
@@ -1476,98 +1627,61 @@
 
                 async function() {
 
-                    if (!dragging) {
-
-                        return;
-
-                    }
-
 
                     dragging =
                         false;
 
 
-                    element
-                        .classList
-                        .remove(
-                            "dragging"
-                        );
+                    const rect =
+                        element
+                            .getBoundingClientRect();
 
 
-                    await syncPosition(
+                    await supabaseClient
 
-                        element.id,
-
-                        Number(
-                            element
-                                .dataset
-                                .xPercent
-                        ),
-
-                        Number(
-                            element
-                                .dataset
-                                .yPercent
+                        .from(
+                            "pops"
                         )
 
-                    );
+                        .update({
+
+                            x_percent:
+
+                                rect.left /
+                                window.innerWidth,
+
+
+                            y_percent:
+
+                                rect.top /
+                                window.innerHeight
+
+                        })
+
+                        .eq(
+                            "id",
+                            element.id
+                        );
+
 
                 }
 
             );
 
-        }
-
-
-        async function syncPosition(
-
-            id,
-
-            xPercent,
-
-            yPercent
-
-        ) {
-
-            if (!supabaseClient) {
-
-                return;
-
-            }
-
-
-            await supabaseClient
-
-                .from(
-                    "pops"
-                )
-
-                .update({
-
-                    x_percent:
-                        xPercent,
-
-                    y_percent:
-                        yPercent
-
-                })
-
-                .eq(
-                    "id",
-                    id
-                );
 
         }
 
 
-        /* =====================================================
-           SEND
-        ===================================================== */
+        /* ============================================
+           SEND MESSAGE
+        ============================================ */
 
         async function sendMessage() {
 
+
             const text =
-                input.value
+                input
+                    .value
                     .trim();
 
 
@@ -1579,10 +1693,7 @@
 
 
             /*
-                ABSOLUTE SECRET PROTECTION.
-
-                The secret can NEVER become
-                a database message.
+                NEVER send admin password.
             */
 
             if (
@@ -1590,53 +1701,53 @@
                 ADMIN_SECRET
             ) {
 
+
                 input.value =
                     "";
 
+
                 openAdmin();
 
+
                 return;
+
 
             }
 
 
-            if (
-                wallLocked
-            ) {
-
-                alert(
-                    "The wall is currently locked."
-                );
-
-                return;
-
-            }
-
-
-            const payload = {
+            const message = {
 
                 id:
+
                     "pop_" +
                     crypto.randomUUID(),
+
 
                 text:
                     text,
 
+
                 xPercent:
+
                     Math.random() *
                     0.65 +
                     0.05,
 
+
                 yPercent:
+
                     Math.random() *
                     0.60 +
                     0.05,
 
+
                 bold:
                     currentStyles.bold,
 
+
                 italic:
                     currentStyles.italic,
+
 
                 underline:
                     currentStyles.underline
@@ -1649,110 +1760,8 @@
 
 
             renderMessage(
-                payload
+                message
             );
-
-
-            const {
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .insert({
-
-                        id:
-                            payload.id,
-
-                        text:
-                            payload.text,
-
-                        x_percent:
-                            payload.xPercent,
-
-                        y_percent:
-                            payload.yPercent,
-
-                        bold:
-                            payload.bold,
-
-                        italic:
-                            payload.italic,
-
-                        underline:
-                            payload.underline
-
-                    });
-
-
-            if (error) {
-
-                console.error(
-                    error
-                );
-
-            }
-
-
-            await trimOldMessages();
-
-        }
-
-
-        /* =====================================================
-           TRIM
-        ===================================================== */
-
-        async function trimOldMessages() {
-
-            const {
-                data,
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .select(
-                        "id, created_at"
-                    )
-
-                    .order(
-                        "created_at",
-                        {
-                            ascending:
-                                false
-                        }
-                    );
-
-
-            if (
-                error ||
-                data.length <=
-                MAX_MESSAGES
-            ) {
-
-                return;
-
-            }
-
-
-            const ids =
-                data
-                    .slice(
-                        MAX_MESSAGES
-                    )
-                    .map(
-                        item =>
-                            item.id
-                    );
 
 
             await supabaseClient
@@ -1761,25 +1770,50 @@
                     "pops"
                 )
 
-                .delete()
+                .insert({
 
-                .in(
-                    "id",
-                    ids
-                );
+                    id:
+                        message.id,
+
+
+                    text:
+                        message.text,
+
+
+                    x_percent:
+                        message.xPercent,
+
+
+                    y_percent:
+                        message.yPercent,
+
+
+                    bold:
+                        message.bold,
+
+
+                    italic:
+                        message.italic,
+
+
+                    underline:
+                        message.underline
+
+                });
+
 
         }
 
 
-        /* =====================================================
-           LOAD
-        ===================================================== */
+        /* ============================================
+           LOAD MESSAGES
+        ============================================ */
 
-        async function loadExistingPops() {
+        async function loadMessages() {
+
 
             const {
-                data,
-                error
+                data
             } =
 
                 await supabaseClient
@@ -1793,23 +1827,18 @@
                     )
 
                     .order(
+
                         "created_at",
+
                         {
                             ascending:
                                 true
                         }
-                    )
 
-                    .limit(
-                        MAX_MESSAGES
                     );
 
 
-            if (error) {
-
-                console.error(
-                    error
-                );
+            if (!data) {
 
                 return;
 
@@ -1818,27 +1847,33 @@
 
             data.forEach(
 
-                function(pop) {
+                pop => {
 
                     renderMessage({
 
                         id:
                             pop.id,
 
+
                         text:
                             pop.text,
+
 
                         xPercent:
                             pop.x_percent,
 
+
                         yPercent:
                             pop.y_percent,
+
 
                         bold:
                             pop.bold,
 
+
                         italic:
                             pop.italic,
+
 
                         underline:
                             pop.underline
@@ -1849,21 +1884,42 @@
 
             );
 
+
         }
 
 
-        /* =====================================================
+        /* ============================================
            REALTIME
-        ===================================================== */
+        ============================================ */
 
         function startRealtime() {
 
-            supabaseClient
 
-                .channel(
-                    "family-wall"
-                )
+            realtimeChannel =
+                supabaseClient
+                    .channel(
 
+                        "family-wall",
+
+                        {
+
+                            config: {
+
+                                broadcast: {
+
+                                    self:
+                                        true
+
+                                }
+
+                            }
+
+                        }
+
+                    );
+
+
+            realtimeChannel
 
                 .on(
 
@@ -1882,7 +1938,8 @@
 
                     },
 
-                    function(payload) {
+                    payload => {
+
 
                         const pop =
                             payload.new;
@@ -1913,43 +1970,6 @@
 
                         });
 
-                    }
-
-                )
-
-
-                .on(
-
-                    "postgres_changes",
-
-                    {
-
-                        event:
-                            "UPDATE",
-
-                        schema:
-                            "public",
-
-                        table:
-                            "pops"
-
-                    },
-
-                    function(payload) {
-
-                        const pop =
-                            payload.new;
-
-
-                        updateElementPosition(
-
-                            pop.id,
-
-                            pop.x_percent,
-
-                            pop.y_percent
-
-                        );
 
                     }
 
@@ -1973,585 +1993,188 @@
 
                     },
 
-                    function(payload) {
-
-                        const pop =
-                            payload.old;
+                    payload => {
 
 
-                        const element =
-                            document
-                                .getElementById(
-                                    pop.id
-                                );
+                        document
+                            .getElementById(
+                                payload.old.id
+                            )
+                            ?.remove();
 
-
-                        if (element) {
-
-                            element.remove();
-
-                        }
 
                     }
 
                 )
 
 
+                .on(
+
+                    "broadcast",
+
+                    {
+
+                        event:
+                            "admin-plugin-command"
+
+                    },
+
+                    receiveAdminCommand
+
+                )
+
+
                 .subscribe(
 
-                    function(status) {
+                    status => {
+
 
                         if (
                             status ===
                             "SUBSCRIBED"
                         ) {
 
-                            connectionStatus
-                                .innerText =
+
+                            connectionStatus.innerText =
                                 "● LIVE";
+
 
                         }
 
-                    }
-
-                );
-
-        }
-
-
-        /* =====================================================
-           ADMIN COMMAND RUNNER
-        ===================================================== */
-
-        async function runAdminCommand() {
-
-            const command =
-                adminCommandInput
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const value =
-                adminValueInput
-                    .value
-                    .trim();
-
-
-            switch(command) {
-
-
-                case "clear-wall":
-
-                    await adminClearWall();
-
-                    break;
-
-
-                case "lock-wall":
-
-                    wallLocked =
-                        true;
-
-                    sendButton.disabled =
-                        true;
-
-                    sendButton.innerText =
-                        "LOCKED";
-
-                    setAdminOutput(
-                        "Wall locked."
-                    );
-
-                    break;
-
-
-                case "unlock-wall":
-
-                    wallLocked =
-                        false;
-
-                    sendButton.disabled =
-                        false;
-
-                    sendButton.innerText =
-                        "POP IT!";
-
-                    setAdminOutput(
-                        "Wall unlocked."
-                    );
-
-                    break;
-
-
-                case "freeze-dragging":
-
-                    draggingEnabled =
-                        false;
-
-                    setAdminOutput(
-                        "Dragging frozen."
-                    );
-
-                    break;
-
-
-                case "enable-dragging":
-
-                    draggingEnabled =
-                        true;
-
-                    setAdminOutput(
-                        "Dragging enabled."
-                    );
-
-                    break;
-
-
-                case "dark-mode":
-
-                    document.body
-                        .classList
-                        .add(
-                            "dark"
-                        );
-
-                    setAdminOutput(
-                        "Dark mode enabled."
-                    );
-
-                    break;
-
-
-                case "light-mode":
-
-                    document.body
-                        .classList
-                        .remove(
-                            "dark"
-                        );
-
-                    setAdminOutput(
-                        "Light mode enabled."
-                    );
-
-                    break;
-
-
-                case "announce":
-
-                    if (!value) {
-
-                        setAdminOutput(
-                            "Enter announcement in Value."
-                        );
-
-                        return;
 
                     }
 
-                    await adminAnnounce(
-                        value
-                    );
+                );
 
-                    break;
-
-
-                case "shake-wall":
-
-                    adminShakeWall();
-
-                    setAdminOutput(
-                        "Wall shaken."
-                    );
-
-                    break;
-
-
-                case "randomize":
-
-                    await adminRandomize();
-
-                    break;
-
-
-                default:
-
-                    setAdminOutput(
-                        "Unknown command."
-                    );
-
-                    return;
-
-            }
-
-
-            adminCommandInput.value =
-                "";
-
-            adminValueInput.value =
-                "";
 
         }
 
 
-        /* =====================================================
-           CLEAR WALL
-        ===================================================== */
-
-        async function adminClearWall() {
-
-            const confirmed =
-                confirm(
-                    "Delete every message?"
-                );
-
-
-            if (!confirmed) {
-
-                setAdminOutput(
-                    "Cancelled."
-                );
-
-                return;
-
-            }
-
-
-            const {
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .delete()
-
-                    .neq(
-                        "id",
-                        ""
-                    );
-
-
-            if (error) {
-
-                console.error(
-                    error
-                );
-
-                setAdminOutput(
-                    "Clear failed."
-                );
-
-                return;
-
-            }
-
-
-            setAdminOutput(
-                "Wall cleared."
-            );
-
-        }
-
-
-        /* =====================================================
-           ANNOUNCEMENT
-        ===================================================== */
-
-        async function adminAnnounce(
-            text
-        ) {
-
-            const payload = {
-
-                id:
-                    "pop_" +
-                    crypto.randomUUID(),
-
-                text:
-                    "📢 " +
-                    text,
-
-                xPercent:
-                    0.3,
-
-                yPercent:
-                    0.1,
-
-                bold:
-                    true,
-
-                italic:
-                    false,
-
-                underline:
-                    false
-
-            };
-
-
-            const {
-                error
-            } =
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .insert({
-
-                        id:
-                            payload.id,
-
-                        text:
-                            payload.text,
-
-                        x_percent:
-                            payload.xPercent,
-
-                        y_percent:
-                            payload.yPercent,
-
-                        bold:
-                            true,
-
-                        italic:
-                            false,
-
-                        underline:
-                            false
-
-                    });
-
-
-            if (error) {
-
-                setAdminOutput(
-                    "Announcement failed."
-                );
-
-                console.error(
-                    error
-                );
-
-                return;
-
-            }
-
-
-            await trimOldMessages();
-
-
-            setAdminOutput(
-                "Announcement sent."
-            );
-
-        }
-
-
-        /* =====================================================
-           SHAKE
-        ===================================================== */
-
-        function adminShakeWall() {
-
-            const messages =
-                document
-                    .querySelectorAll(
-                        ".popped-msg"
-                    );
-
-
-            messages.forEach(
-
-                function(element) {
-
-                    element
-                        .classList
-                        .remove(
-                            "shake"
-                        );
-
-
-                    void element.offsetWidth;
-
-
-                    element
-                        .classList
-                        .add(
-                            "shake"
-                        );
-
-                }
-
-            );
-
-        }
-
-
-        /* =====================================================
-           RANDOMIZE
-        ===================================================== */
-
-        async function adminRandomize() {
-
-            const messages =
-                document
-                    .querySelectorAll(
-                        ".popped-msg"
-                    );
-
-
-            setAdminOutput(
-                "Randomizing..."
-            );
-
-
-            for (
-                const element
-                of messages
-            ) {
-
-                const xPercent =
-                    Math.random() *
-                    0.70 +
-                    0.05;
-
-
-                const yPercent =
-                    Math.random() *
-                    0.65 +
-                    0.05;
-
-
-                updateElementPosition(
-
-                    element.id,
-
-                    xPercent,
-
-                    yPercent
-
-                );
-
-
-                await supabaseClient
-
-                    .from(
-                        "pops"
-                    )
-
-                    .update({
-
-                        x_percent:
-                            xPercent,
-
-                        y_percent:
-                            yPercent
-
-                    })
-
-                    .eq(
-                        "id",
-                        element.id
-                    );
-
-            }
-
-
-            setAdminOutput(
-                "Messages randomized."
-            );
-
-        }
-
-
-        /* =====================================================
-           ADMIN ENTER KEY
-        ===================================================== */
-
-        adminCommandInput.addEventListener(
+        /* ============================================
+           ENTER KEYS
+        ============================================ */
+
+        input.addEventListener(
 
             "keydown",
 
             function(event) {
+
 
                 if (
                     event.key ===
                     "Enter"
                 ) {
 
+
                     event.preventDefault();
 
-                    runAdminCommand();
+
+                    sendMessage();
+
 
                 }
+
 
             }
 
         );
 
 
-        adminValueInput.addEventListener(
+        adminCommandInput
+            .addEventListener(
 
-            "keydown",
+                "keydown",
 
-            function(event) {
+                function(event) {
 
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
 
-                    event.preventDefault();
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
 
-                    runAdminCommand();
+
+                        runAdminCommand();
+
+
+                    }
+
 
                 }
 
-            }
-
-        );
+            );
 
 
-        /* =====================================================
+        adminValueInput
+            .addEventListener(
+
+                "keydown",
+
+                function(event) {
+
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+
+                        runAdminCommand();
+
+
+                    }
+
+
+                }
+
+            );
+
+
+        /* ============================================
+           EXPOSE FUNCTIONS USED BY HTML BUTTONS
+        ============================================ */
+
+        window.toggleStyle =
+            toggleStyle;
+
+
+        window.sendMessage =
+            sendMessage;
+
+
+        window.runAdminCommand =
+            runAdminCommand;
+
+
+        window.closeAdmin =
+            closeAdmin;
+
+
+        /* ============================================
            START
-        ===================================================== */
+        ============================================ */
 
         async function startApp() {
 
-            if (
-                !initializeSupabase()
-            ) {
 
-                sendButton.disabled =
-                    true;
-
-                return;
-
-            }
+            initializeSupabase();
 
 
-            connectionStatus.innerText =
-                "Loading wall...";
+            await loadAdminFunctions();
 
 
-            await trimOldMessages();
+            await loadMessages();
 
-            await loadExistingPops();
 
             startRealtime();
+
 
         }
 
 
         startApp();
+
 
     </script>
 
