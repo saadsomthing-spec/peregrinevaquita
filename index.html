@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Pop Wall</title>
+    <title>Universal Connected Pop Wall</title>
     
-    <!-- 1. LOAD YOUR SEPARATE CREDENTIALS FILE -->
+    <!-- Load separate credentials configuration layout file -->
     <script src="config.js"></script>
     
-    <!-- 2. Load Supabase real-time client library -->
+    <!-- Load Supabase real-time engine tracking client -->
     <script src="https://unpkg.com"></script>
     
     <style>
@@ -65,31 +65,36 @@
         const wall = document.getElementById('canvas-wall');
         let currentStyles = { bold: false, italic: false, underline: false };
         let supabaseClient = null;
-        let wallChannel = null;
 
+        // Initialize connection parameters safely
         try {
-            // Check if the script library and config file are both loaded up properly
             if (typeof supabase !== 'undefined' && window.SUPABASE_CONFIG) {
-                
-                // Read configurations directly from window context memory space
                 supabaseClient = supabase.createClient(window.SUPABASE_CONFIG.URL, window.SUPABASE_CONFIG.ANON_KEY);
                 
-                wallChannel = supabaseClient.channel('public:realtime-wall', {
-                    config: { broadcast: { ack: false, self: true } }
-                });
+                // 1. Fetch old historical pops immediately on loading the page
+                loadExistingPops();
 
-                wallChannel
-                    .on('broadcast', { event: 'pop-message' }, (response) => {
-                        renderMessage(response.payload);
+                // 2. Open a direct live channel mapping changes on our new database table
+                supabaseClient
+                    .channel('table-db-changes')
+                    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pops' }, (payload) => {
+                        console.log("Database write change sync detected:", payload);
+                        renderMessage(payload.new);
                     })
-                    .subscribe((status) => {
-                        console.log("WebSocket Sync Status Active:", status);
-                    });
-            } else {
-                console.log("Configuration files or library blocked. Running backup isolation layer mode.");
+                    .subscribe();
             }
         } catch(err) {
-            console.error("Initialization failure guard:", err);
+            console.error("Initialization check failure:", err);
+        }
+
+        async function loadExistingPops() {
+            const { data, error } = await supabaseClient.from('pops').select('*');
+            if (data && !error) {
+                data.forEach(pop => {
+                    // Re-draw history onto screen canvas (without playing pop sounds for old entries)
+                    renderMessage(pop, true);
+                });
+            }
         }
 
         function playPopSound() {
@@ -117,19 +122,25 @@
             }
         }
 
-        function renderMessage(msg) {
+        function renderMessage(msg, silent = false) {
+            // Guard loop tracking duplicates
+            if (document.getElementById(msg.id)) return;
+
             const div = document.createElement('div');
             div.className = 'popped-msg';
+            div.id = msg.id;
             div.innerText = msg.text;
-            div.style.left = (msg.xPercent * window.innerWidth) + 'px';
-            div.style.top = (msg.yPercent * window.innerHeight) + 'px';
+            
+            // Map table floating coordinates smoothly over screen dimensions
+            div.style.left = (msg.x_percent * window.innerWidth) + 'px';
+            div.style.top = (msg.y_percent * window.innerHeight) + 'px';
             
             if (msg.bold) div.style.fontWeight = 'bold';
             if (msg.italic) div.style.fontStyle = 'italic';
             if (msg.underline) div.style.textDecoration = 'underline';
             
             wall.appendChild(div);
-            playPopSound();
+            if (!silent) playPopSound();
         }
 
         async function sendMessage() {
@@ -137,26 +148,20 @@
             const text = inputField.value.trim();
             if (!text) return;
 
-            const xPercent = Math.random() * 0.7 + 0.05; 
-            const yPercent = Math.random() * 0.7 + 0.05; 
+            const randomId = "pop_" + Math.random().toString(36).substr(2, 9);
+            const x_percent = Math.random() * 0.7 + 0.05; 
+            const y_percent = Math.random() * 0.7 + 0.05; 
 
-            const payload = {
-                text, xPercent, yPercent,
+            // Physically write a row into your Supabase database table
+            await supabaseClient.from('pops').insert([{
+                id: randomId,
+                text: text,
+                x_percent: x_percent,
+                y_percent: y_percent,
                 bold: currentStyles.bold,
                 italic: currentStyles.italic,
                 underline: currentStyles.underline
-            };
-
-            if (wallChannel) {
-                wallChannel.send({
-                    type: 'broadcast',
-                    event: 'pop-message',
-                    payload: payload
-                });
-            } else {
-                // Local testing sandbox fallback route
-                renderMessage(payload);
-            }
+            }]);
 
             inputField.value = '';
         }
