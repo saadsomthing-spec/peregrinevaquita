@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Connected Pop Wall</title>
     
-    <!-- Load separate credentials configuration layout file -->
+    <!-- 1. Load separate credentials configuration layout file -->
     <script src="config.js"></script>
     
-    <!-- Load Supabase real-time engine tracking client -->
+    <!-- 2. Load Supabase real-time engine tracking client -->
     <script src="https://unpkg.com"></script>
     
     <style>
@@ -72,17 +72,27 @@
             if (typeof supabase !== 'undefined' && window.SUPABASE_CONFIG) {
                 supabaseClient = supabase.createClient(window.SUPABASE_CONFIG.URL, window.SUPABASE_CONFIG.ANON_KEY);
                 
-                // Fetch older wall data history immediately on loading
+                // Fetch older data elements straight out of the database list on initialization
                 loadExistingPops();
 
-                // Open a live channel monitoring changes on our database table
+                // Open subscription listening for live updates across table fields
                 supabaseClient
                     .channel('table-db-changes')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'pops' }, (payload) => {
-                        console.log("Database event detected:", payload);
+                        console.log("Inbound database synchronizer streaming event:", payload);
                         
                         if (payload.eventType === 'INSERT') {
-                            renderMessage(payload.new);
+                            // Map database structural parameters back to rendering names
+                            const normalized = {
+                                id: payload.new.id,
+                                text: payload.new.text,
+                                xPercent: payload.new.x_percent,
+                                yPercent: payload.new.y_percent,
+                                bold: payload.new.bold,
+                                italic: payload.new.italic,
+                                underline: payload.new.underline
+                            };
+                            renderMessage(normalized);
                         } else if (payload.eventType === 'UPDATE') {
                             updateElementPosition(payload.new.id, payload.new.x_percent, payload.new.y_percent);
                         }
@@ -90,14 +100,20 @@
                     .subscribe();
             }
         } catch(err) {
-            console.error("Initialization check failure:", err);
+            console.error("Initialization failure checks:", err);
         }
 
         async function loadExistingPops() {
+            if(!supabaseClient) return;
             const { data, error } = await supabaseClient.from('pops').select('*');
             if (data && !error) {
                 data.forEach(pop => {
-                    renderMessage(pop, true); // Render history silently
+                    const normalized = {
+                        id: pop.id, text: pop.text,
+                        xPercent: pop.x_percent, yPercent: pop.y_percent,
+                        bold: pop.bold, italic: pop.italic, underline: pop.underline
+                    };
+                    renderMessage(normalized, true); // Silent setup for histories
                 });
             }
         }
@@ -128,10 +144,10 @@
         }
 
         function renderMessage(msg, silent = false) {
-            // If it already exists on screen, just make sure its position matches
+            // Guard loop tracking duplication checks
             const existing = document.getElementById(msg.id);
             if (existing) {
-                updateElementPosition(msg.id, msg.x_percent, msg.y_percent);
+                updateElementPosition(msg.id, msg.xPercent, msg.yPercent);
                 return;
             }
 
@@ -140,25 +156,25 @@
             div.id = msg.id;
             div.innerText = msg.text;
             
-            div.style.left = (msg.x_percent * window.innerWidth) + 'px';
-            div.style.top = (msg.y_percent * window.innerHeight) + 'px';
+            div.style.left = (msg.xPercent * window.innerWidth) + 'px';
+            div.style.top = (msg.yPercent * window.innerHeight) + 'px';
             
             if (msg.bold) div.style.fontWeight = 'bold';
             if (msg.italic) div.style.fontStyle = 'italic';
             if (msg.underline) div.style.textDecoration = 'underline';
             
-            // Activate physics drag handlers onto this node item element
+            // Link interactive moving listener logic loops
             setupElementDraggability(div);
             
             wall.appendChild(div);
             if (!silent) playPopSound();
         }
 
-        function updateElementPosition(id, x_percent, y_percent) {
+        function updateElementPosition(id, xPercent, yPercent) {
             const target = document.getElementById(id);
             if (target) {
-                target.style.left = (x_percent * window.innerWidth) + 'px';
-                target.style.top = (y_percent * window.innerHeight) + 'px';
+                target.style.left = (xPercent * window.innerWidth) + 'px';
+                target.style.top = (yPercent * window.innerHeight) + 'px';
             }
         }
 
@@ -183,16 +199,17 @@
                 element.style.left = newX + 'px';
                 element.style.top = newY + 'px';
 
-                // Physically update the text box location row values inside Supabase database
-                await supabaseClient
-                    .from('pops')
-                    .update({ x_percent, y_percent })
-                    .eq('id', element.id);
+                if (supabaseClient) {
+                    await supabaseClient
+                        .from('pops')
+                        .update({ x_percent, y_percent })
+                        .eq('id', element.id);
+                }
             });
 
             document.addEventListener('mouseup', () => { activeDrag = false; });
             
-            // Mobile touch screen dragging compatibility
+            // Mobile display touch drag configuration controls
             element.addEventListener('touchstart', (e) => {
                 activeDrag = true;
                 const touch = e.touches[0];
@@ -209,28 +226,44 @@
                 const x_percent = newX / window.innerWidth;
                 const y_percent = newY / window.innerHeight;
 
-                element.style.left = newX + 'px';
-                element.style.top = newY + 'px';
-
-                await supabaseClient
-                    .from('pops')
-                    .update({ x_percent, y_percent })
-                    .eq('id', element.id);
-            });
-
-            document.addEventListener('touchend', () => { activeDrag = false; });
-        }
-
-        async function sendMessage() {
-            const inputField = document.getElementById('msg-input');
-            const text = inputField.value.trim();
-            if (!text) return;
-
-            const randomId = "pop_" + Math.random().toString(36).substr(2, 9);
-            const x_percent = Math.random() * 0.7 + 0.05; 
-            const y_percent = Math.random() * 0.7 + 0.05; 
-
-            await supabaseClient.from('pops').insert([{
-                id: randomId,
-                text: text,
-                x_percent: x_percent,
+Use code with caution.
+element.style.left = newX + 'px';
+element.style.top = newY + 'px';
+if (supabaseClient) {
+await supabaseClient
+.from('pops')
+.update({ x_percent, y_percent })
+.eq('id', element.id);
+}
+});
+document.addEventListener('touchend', () => { activeDrag = false; });
+}
+async function sendMessage() {
+const inputField = document.getElementById('msg-input');
+const text = inputField.value.trim();
+if (!text) return;
+const payload = {
+id: "pop_" + Math.random().toString(36).substr(2, 9),
+text: text,
+xPercent: Math.random() * 0.7 + 0.05,
+yPercent: Math.random() * 0.7 + 0.05,
+bold: currentStyles.bold,
+italic: currentStyles.italic,
+underline: currentStyles.underline
+};
+// 1. Force display to load immediately on your device layout instantly
+renderMessage(payload);
+inputField.value = '';
+// 2. Safely sync data to database background table structure
+if (supabaseClient) {
+await supabaseClient.from('pops').insert([{
+id: payload.id,
+text: payload.text,
+x_percent: payload.xPercent,
+y_percent: payload.yPercent,
+bold: payload.bold,
+italic: payload.italic,
+underline: payload.underline
+}]);
+}
+}
