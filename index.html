@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Pop Wall</title>
-    <!-- Loads Supabase's library from an alternate CDN to avoid network timeouts -->
+    
+    <!-- 1. LOAD YOUR SEPARATE CREDENTIALS FILE -->
+    <script src="config.js"></script>
+    
+    <!-- 2. Load Supabase real-time client library -->
     <script src="https://unpkg.com"></script>
+    
     <style>
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -50,7 +55,6 @@
 
     <div id="control-panel">
         <input type="text" id="msg-input" placeholder="Type a message here...">
-        <!-- Fixed button IDs to resolve the classList errors from your logs -->
         <button class="btn" id="bold-btn" onclick="toggleStyle('bold')">B</button>
         <button class="btn" id="italic-btn" onclick="toggleStyle('italic')">I</button>
         <button class="btn" id="underline-btn" onclick="toggleStyle('underline')">U</button>
@@ -63,14 +67,14 @@
         let supabaseClient = null;
         let wallChannel = null;
 
-        // Your exact verified credentials
-         const SUPABASE_URL = "https://vpzpiylkcjhrrzsvoqxn.supabase.co";
-         const SUPABASE_ANON_KEY = "sb_publishable_Diln9djw8ULse9WOBm_rjw_G4SvpFTx";
         try {
-            // Checks if network library script finished loading
-            if (typeof supabase !== 'undefined') {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                wallChannel = supabaseClient.channel('realtime-wall', {
+            // Check if the script library and config file are both loaded up properly
+            if (typeof supabase !== 'undefined' && window.SUPABASE_CONFIG) {
+                
+                // Read configurations directly from window context memory space
+                supabaseClient = supabase.createClient(window.SUPABASE_CONFIG.URL, window.SUPABASE_CONFIG.ANON_KEY);
+                
+                wallChannel = supabaseClient.channel('public:realtime-wall', {
                     config: { broadcast: { ack: false, self: true } }
                 });
 
@@ -78,13 +82,14 @@
                     .on('broadcast', { event: 'pop-message' }, (response) => {
                         renderMessage(response.payload);
                     })
-                    .subscribe();
-                console.log("Supabase infrastructure linked cleanly.");
+                    .subscribe((status) => {
+                        console.log("WebSocket Sync Status Active:", status);
+                    });
             } else {
-                console.log("Network blocked the CDN engine. Operating via local backup tracking layout.");
+                console.log("Configuration files or library blocked. Running backup isolation layer mode.");
             }
         } catch(err) {
-            console.error("Supabase failed initialization framework wrapper:", err);
+            console.error("Initialization failure guard:", err);
         }
 
         function playPopSound() {
@@ -142,7 +147,6 @@
                 underline: currentStyles.underline
             };
 
-            // Sends to everyone if connected, otherwise drops locally immediately
             if (wallChannel) {
                 wallChannel.send({
                     type: 'broadcast',
@@ -150,6 +154,7 @@
                     payload: payload
                 });
             } else {
+                // Local testing sandbox fallback route
                 renderMessage(payload);
             }
 
