@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,99 +12,167 @@
 
     <title>Universal Pop Wall</title>
 
-    <!-- Supabase browser library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Your Supabase URL + public key -->
+    <!-- Supabase -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- Your configurable settings -->
     <script src="config.js"></script>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
 
+
         html,
         body {
+
             margin: 0;
+
             padding: 0;
+
             width: 100%;
+
             height: 100%;
+
         }
+
 
         body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: #eef2f3;
-            overflow: hidden;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                #eef2f3;
+
+            overflow:
+                hidden;
+
         }
 
-        /* -----------------------------------
-           SHARED WALL
-        ----------------------------------- */
+
+        /* ==============================
+           WALL
+        ============================== */
 
         #canvas-wall {
-            position: fixed;
-            inset: 0;
-            overflow: hidden;
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            overflow:
+                hidden;
+
         }
 
-        /* -----------------------------------
-           CONNECTION STATUS
-        ----------------------------------- */
+
+        /* ==============================
+           STATUS
+        ============================== */
 
         #connection-status {
-            position: fixed;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
 
-            background: white;
-            padding: 7px 13px;
+            position:
+                fixed;
 
-            border-radius: 20px;
+            top:
+                15px;
+
+            left:
+                50%;
+
+            transform:
+                translateX(-50%);
+
+            background:
+                white;
+
+            padding:
+                7px 13px;
+
+            border-radius:
+                20px;
 
             box-shadow:
-                0 3px 12px rgba(0, 0, 0, 0.12);
+                0 3px 12px
+                rgba(0, 0, 0, 0.12);
 
-            font-size: 12px;
-            font-weight: 600;
+            font-size:
+                12px;
 
-            z-index: 5000;
+            font-weight:
+                600;
+
+            z-index:
+                5000;
+
         }
 
-        /* -----------------------------------
-           POPPED MESSAGES
-        ----------------------------------- */
+
+        /* ==============================
+           MESSAGES
+        ============================== */
 
         .popped-msg {
-            position: absolute;
 
-            min-width: 50px;
-            max-width: 350px;
+            position:
+                absolute;
 
-            padding: 10px 14px;
+            min-width:
+                50px;
 
-            background: white;
+            max-width:
+                350px;
 
-            border-radius: 10px;
+            padding:
+                10px 14px;
+
+            background:
+                white;
+
+            border-radius:
+                10px;
 
             box-shadow:
-                0 5px 15px rgba(0, 0, 0, 0.14);
+                0 5px 15px
+                rgba(0, 0, 0, 0.14);
 
-            font-size: 17px;
+            font-size:
+                17px;
 
-            word-break: break-word;
+            word-break:
+                break-word;
 
-            cursor: grab;
+            cursor:
+                grab;
 
-            user-select: none;
-            touch-action: none;
+            user-select:
+                none;
 
-            z-index: 10;
+            touch-action:
+                none;
 
-            transform: scale(0);
+            z-index:
+                10;
+
+            transform:
+                scale(0);
 
             animation:
-                popIn 0.28s
+                popIn
+                0.28s
                 cubic-bezier(
                     0.175,
                     0.885,
@@ -111,168 +180,292 @@
                     1.275
                 )
                 forwards;
+
         }
+
 
         .popped-msg.dragging {
-            cursor: grabbing;
 
-            z-index: 1000;
+            cursor:
+                grabbing;
+
+            z-index:
+                1000;
 
             box-shadow:
-                0 10px 30px rgba(0, 0, 0, 0.23);
+                0 10px 30px
+                rgba(0, 0, 0, 0.23);
+
         }
+
 
         @keyframes popIn {
+
             to {
-                transform: scale(1);
+
+                transform:
+                    scale(1);
+
             }
+
         }
 
-        /* -----------------------------------
-           CONTROLS
-        ----------------------------------- */
+
+        /* ==============================
+           CONTROL PANEL
+        ============================== */
 
         #control-panel {
-            position: fixed;
 
-            left: 50%;
-            bottom: 20px;
+            position:
+                fixed;
 
-            transform: translateX(-50%);
+            left:
+                50%;
 
-            display: flex;
-            align-items: center;
+            bottom:
+                20px;
 
-            gap: 8px;
+            transform:
+                translateX(-50%);
 
-            padding: 12px 16px;
+            display:
+                flex;
 
-            border-radius: 30px;
+            align-items:
+                center;
 
-            background: white;
+            gap:
+                8px;
+
+            padding:
+                12px 16px;
+
+            border-radius:
+                30px;
+
+            background:
+                white;
 
             box-shadow:
-                0 10px 35px rgba(0, 0, 0, 0.18);
+                0 10px 35px
+                rgba(0, 0, 0, 0.18);
 
-            z-index: 5000;
+            z-index:
+                5000;
+
         }
+
 
         #msg-input {
-            width: 270px;
 
-            border: 1px solid #d5d5d5;
+            width:
+                270px;
 
-            border-radius: 20px;
+            border:
+                1px solid #d5d5d5;
 
-            outline: none;
+            border-radius:
+                20px;
 
-            padding: 10px 14px;
+            outline:
+                none;
 
-            font-size: 15px;
+            padding:
+                10px 14px;
+
+            font-size:
+                15px;
+
         }
+
 
         #msg-input:focus {
-            border-color: #777;
+
+            border-color:
+                #777;
+
         }
+
 
         .format-btn {
-            width: 40px;
-            height: 40px;
 
-            border-radius: 50%;
+            width:
+                40px;
 
-            border: 1px solid #ddd;
+            height:
+                40px;
 
-            background: #f6f6f6;
+            border-radius:
+                50%;
 
-            cursor: pointer;
+            border:
+                1px solid #ddd;
 
-            font-size: 16px;
+            background:
+                #f6f6f6;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            cursor:
+                pointer;
+
+            font-size:
+                16px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
         }
+
 
         .format-btn.active {
-            background: #222;
-            color: white;
-            border-color: #222;
+
+            background:
+                #222;
+
+            color:
+                white;
+
+            border-color:
+                #222;
+
         }
+
 
         #send-btn {
-            height: 40px;
 
-            padding: 0 18px;
+            height:
+                40px;
 
-            border: none;
-            border-radius: 20px;
+            padding:
+                0 18px;
 
-            background: #ff4757;
-            color: white;
+            border:
+                none;
 
-            font-weight: bold;
+            border-radius:
+                20px;
 
-            cursor: pointer;
+            background:
+                #ff4757;
+
+            color:
+                white;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
         }
+
 
         #send-btn:hover {
-            background: #ff6471;
+
+            background:
+                #ff6471;
+
         }
+
 
         #send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+
+            opacity:
+                0.5;
+
+            cursor:
+                not-allowed;
+
         }
+
 
         #sound-btn {
-            width: 40px;
-            height: 40px;
 
-            border-radius: 50%;
+            width:
+                40px;
 
-            border: 1px solid #ddd;
+            height:
+                40px;
 
-            background: #f6f6f6;
+            border-radius:
+                50%;
 
-            cursor: pointer;
+            border:
+                1px solid #ddd;
+
+            background:
+                #f6f6f6;
+
+            cursor:
+                pointer;
+
         }
 
-        /* -----------------------------------
+
+        /* ==============================
            MOBILE
-        ----------------------------------- */
+        ============================== */
 
         @media (max-width: 700px) {
+
             #control-panel {
-                width: calc(100% - 20px);
 
-                bottom: 10px;
+                width:
+                    calc(100% - 20px);
 
-                padding: 10px;
+                bottom:
+                    10px;
 
-                border-radius: 18px;
+                padding:
+                    10px;
 
-                flex-wrap: wrap;
+                border-radius:
+                    18px;
 
-                justify-content: center;
+                flex-wrap:
+                    wrap;
+
+                justify-content:
+                    center;
+
             }
+
 
             #msg-input {
-                width: 100%;
+
+                width:
+                    100%;
+
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
     <div id="canvas-wall"></div>
 
+
     <div id="connection-status">
+
         Connecting...
+
     </div>
 
+
     <div id="control-panel">
+
 
         <input
             type="text"
@@ -282,14 +475,18 @@
             autocomplete="off"
         >
 
+
         <button
             class="format-btn"
             id="bold-btn"
             type="button"
             onclick="toggleStyle('bold')"
         >
+
             <b>B</b>
+
         </button>
+
 
         <button
             class="format-btn"
@@ -297,8 +494,11 @@
             type="button"
             onclick="toggleStyle('italic')"
         >
+
             <i>I</i>
+
         </button>
+
 
         <button
             class="format-btn"
@@ -306,375 +506,599 @@
             type="button"
             onclick="toggleStyle('underline')"
         >
+
             <u>U</u>
+
         </button>
+
 
         <button
             id="sound-btn"
             type="button"
             onclick="unlockAudio()"
-            title="Enable pop sounds"
+            title="Enable sounds"
         >
+
             🔊
+
         </button>
+
 
         <button
             id="send-btn"
             type="button"
             onclick="sendMessage()"
         >
+
             POP IT!
+
         </button>
+
 
     </div>
 
 
     <script>
 
-        /* =========================================================
-           BASIC ELEMENTS
-        ========================================================= */
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
 
         const wall =
-            document.getElementById("canvas-wall");
+            document.getElementById(
+                "canvas-wall"
+            );
+
 
         const input =
-            document.getElementById("msg-input");
+            document.getElementById(
+                "msg-input"
+            );
+
 
         const sendButton =
-            document.getElementById("send-btn");
+            document.getElementById(
+                "send-btn"
+            );
+
 
         const connectionStatus =
-            document.getElementById("connection-status");
+            document.getElementById(
+                "connection-status"
+            );
 
 
-        /* =========================================================
-           FORMAT STATE
-        ========================================================= */
+        /* =====================================================
+           SETTINGS
+        ===================================================== */
+
+        const MAX_MESSAGES =
+
+            Math.max(
+
+                1,
+
+                Number(
+                    window.SUPABASE_CONFIG
+                        ?.MAX_MESSAGES
+                ) || 50
+
+            );
+
+
+        console.log(
+            "Maximum wall messages:",
+            MAX_MESSAGES
+        );
+
+
+        /* =====================================================
+           FORMATTING
+        ===================================================== */
 
         let currentStyles = {
-            bold: false,
-            italic: false,
-            underline: false
+
+            bold:
+                false,
+
+            italic:
+                false,
+
+            underline:
+                false
+
         };
 
 
-        /* =========================================================
+        /* =====================================================
            AUDIO
-        ========================================================= */
+        ===================================================== */
 
-        let audioContext = null;
+        let audioContext =
+            null;
 
 
         function unlockAudio() {
 
+
             if (!audioContext) {
 
+
                 audioContext =
+
                     new (
+
                         window.AudioContext ||
+
                         window.webkitAudioContext
+
                     )();
+
 
             }
 
-            if (audioContext.state === "suspended") {
+
+            if (
+
+                audioContext.state ===
+                "suspended"
+
+            ) {
+
 
                 audioContext.resume();
 
+
             }
 
-            document.getElementById("sound-btn").innerText =
-                "🔊";
+
+            document
+                .getElementById(
+                    "sound-btn"
+                )
+                .innerText =
+                    "🔊";
+
 
         }
 
 
         function playPopSound() {
 
+
             if (!audioContext) {
+
                 return;
+
             }
+
 
             try {
 
+
                 const oscillator =
-                    audioContext.createOscillator();
+                    audioContext
+                        .createOscillator();
+
 
                 const gain =
-                    audioContext.createGain();
+                    audioContext
+                        .createGain();
 
 
-                oscillator.type = "sine";
+                oscillator.type =
+                    "sine";
 
 
-                oscillator.frequency.setValueAtTime(
-                    180,
-                    audioContext.currentTime
+                oscillator
+                    .frequency
+                    .setValueAtTime(
+
+                        180,
+
+                        audioContext
+                            .currentTime
+
+                    );
+
+
+                oscillator
+                    .frequency
+                    .exponentialRampToValueAtTime(
+
+                        650,
+
+                        audioContext
+                            .currentTime +
+                            0.12
+
+                    );
+
+
+                gain
+                    .gain
+                    .setValueAtTime(
+
+                        0.20,
+
+                        audioContext
+                            .currentTime
+
+                    );
+
+
+                gain
+                    .gain
+                    .exponentialRampToValueAtTime(
+
+                        0.001,
+
+                        audioContext
+                            .currentTime +
+                            0.12
+
+                    );
+
+
+                oscillator.connect(
+                    gain
                 );
 
 
-                oscillator.frequency.exponentialRampToValueAtTime(
-                    650,
-                    audioContext.currentTime + 0.12
+                gain.connect(
+                    audioContext.destination
                 );
-
-
-                gain.gain.setValueAtTime(
-                    0.20,
-                    audioContext.currentTime
-                );
-
-
-                gain.gain.exponentialRampToValueAtTime(
-                    0.001,
-                    audioContext.currentTime + 0.12
-                );
-
-
-                oscillator.connect(gain);
-
-                gain.connect(audioContext.destination);
 
 
                 oscillator.start();
 
+
                 oscillator.stop(
-                    audioContext.currentTime + 0.12
+
+                    audioContext
+                        .currentTime +
+                        0.12
+
                 );
+
 
             }
 
             catch (error) {
 
+
                 console.warn(
-                    "Could not play pop sound:",
+
+                    "Could not play sound:",
+
                     error
+
                 );
 
+
             }
+
 
         }
 
 
-        /*
-            Browsers normally require at least one user interaction
-            before audio can start.
-
-            Clicking anywhere once unlocks audio.
-        */
-
         document.addEventListener(
+
             "pointerdown",
+
             unlockAudio,
+
             {
-                once: true
+                once:
+                    true
             }
+
         );
 
 
-        /* =========================================================
-           SUPABASE CONFIG CHECK
-        ========================================================= */
+        /* =====================================================
+           SUPABASE
+        ===================================================== */
 
-        let supabaseClient = null;
+        let supabaseClient =
+            null;
 
 
         function initializeSupabase() {
 
+
             if (
-                typeof supabase === "undefined"
+
+                typeof supabase ===
+                "undefined"
+
             ) {
 
-                connectionStatus.innerText =
-                    "Supabase library failed";
+
+                connectionStatus
+                    .innerText =
+                    "Supabase failed";
+
 
                 console.error(
-                    "Supabase JS did not load."
+                    "Supabase library failed."
                 );
 
+
                 return false;
+
+
             }
 
 
             if (
+
                 !window.SUPABASE_CONFIG ||
+
                 !window.SUPABASE_CONFIG.URL ||
+
                 !window.SUPABASE_CONFIG.ANON_KEY
+
             ) {
 
-                connectionStatus.innerText =
+
+                connectionStatus
+                    .innerText =
                     "Missing config.js";
 
+
                 console.error(
-                    "SUPABASE_CONFIG is missing."
+                    "Supabase config missing."
                 );
 
+
                 return false;
+
+
             }
 
 
             supabaseClient =
                 supabase.createClient(
 
-                    window.SUPABASE_CONFIG.URL,
+                    window
+                        .SUPABASE_CONFIG
+                        .URL,
 
-                    window.SUPABASE_CONFIG.ANON_KEY
+                    window
+                        .SUPABASE_CONFIG
+                        .ANON_KEY
 
                 );
 
 
             return true;
 
+
         }
 
 
-        /* =========================================================
-           TEXT FORMATTING
-        ========================================================= */
+        /* =====================================================
+           STYLE BUTTONS
+        ===================================================== */
 
-        function toggleStyle(style) {
+        function toggleStyle(
+            style
+        ) {
+
 
             currentStyles[style] =
                 !currentStyles[style];
 
 
             const button =
-                document.getElementById(
-                    style + "-btn"
-                );
+
+                document
+                    .getElementById(
+
+                        style +
+                        "-btn"
+
+                    );
 
 
             if (button) {
 
-                button.classList.toggle(
-                    "active",
-                    currentStyles[style]
-                );
+
+                button
+                    .classList
+                    .toggle(
+
+                        "active",
+
+                        currentStyles[
+                            style
+                        ]
+
+                    );
+
 
             }
+
 
         }
 
 
-        /* =========================================================
-           POSITION
-        ========================================================= */
+        /* =====================================================
+           POSITION HELPERS
+        ===================================================== */
 
         function clamp(
+
             value,
+
             minimum,
+
             maximum
+
         ) {
 
+
             return Math.min(
-                Math.max(value, minimum),
+
+                Math.max(
+                    value,
+                    minimum
+                ),
+
                 maximum
+
             );
+
 
         }
 
 
         function updateElementPosition(
+
             id,
+
             xPercent,
+
             yPercent
+
         ) {
 
+
             const element =
-                document.getElementById(id);
+
+                document
+                    .getElementById(
+                        id
+                    );
 
 
             if (!element) {
+
                 return;
+
             }
 
 
             element.dataset.xPercent =
                 xPercent;
 
+
             element.dataset.yPercent =
                 yPercent;
 
 
             const maxX =
+
                 Math.max(
+
                     0,
+
                     window.innerWidth -
                     element.offsetWidth
+
                 );
 
 
             const maxY =
+
                 Math.max(
+
                     0,
+
                     window.innerHeight -
                     element.offsetHeight
+
                 );
 
 
             const x =
+
                 clamp(
-                    xPercent * window.innerWidth,
+
+                    xPercent *
+                    window.innerWidth,
+
                     0,
+
                     maxX
+
                 );
 
 
             const y =
+
                 clamp(
-                    yPercent * window.innerHeight,
+
+                    yPercent *
+                    window.innerHeight,
+
                     0,
+
                     maxY
+
                 );
 
 
             element.style.left =
                 x + "px";
 
+
             element.style.top =
                 y + "px";
+
 
         }
 
 
-        /* =========================================================
-           RENDER MESSAGE
-        ========================================================= */
+        /* =====================================================
+           RENDER
+        ===================================================== */
 
         function renderMessage(
+
             message,
+
             silent = false
+
         ) {
 
+
             const existing =
-                document.getElementById(
-                    message.id
-                );
 
+                document
+                    .getElementById(
+                        message.id
+                    );
 
-            /*
-                Prevent duplicates.
-
-                Important because sender renders locally,
-                then Supabase also sends the INSERT event.
-            */
 
             if (existing) {
 
+
                 updateElementPosition(
+
                     message.id,
+
                     message.xPercent,
+
                     message.yPercent
+
                 );
 
+
                 return;
+
 
             }
 
 
             const element =
-                document.createElement("div");
+
+                document
+                    .createElement(
+                        "div"
+                    );
 
 
             element.className =
@@ -689,37 +1113,61 @@
                 message.text;
 
 
-            if (message.bold) {
+            if (
+                message.bold
+            ) {
 
-                element.style.fontWeight =
+
+                element
+                    .style
+                    .fontWeight =
                     "bold";
 
+
             }
 
 
-            if (message.italic) {
+            if (
+                message.italic
+            ) {
 
-                element.style.fontStyle =
+
+                element
+                    .style
+                    .fontStyle =
                     "italic";
 
+
             }
 
 
-            if (message.underline) {
+            if (
+                message.underline
+            ) {
 
-                element.style.textDecoration =
+
+                element
+                    .style
+                    .textDecoration =
                     "underline";
 
+
             }
 
 
-            wall.appendChild(element);
+            wall.appendChild(
+                element
+            );
 
 
             updateElementPosition(
+
                 message.id,
+
                 message.xPercent,
+
                 message.yPercent
+
             );
 
 
@@ -730,33 +1178,48 @@
 
             if (!silent) {
 
+
                 playPopSound();
 
+
             }
+
 
         }
 
 
-        /* =========================================================
-           DATABASE POSITION UPDATE
-        ========================================================= */
+        /* =====================================================
+           DATABASE POSITION
+        ===================================================== */
 
         async function syncPosition(
+
             id,
+
             xPercent,
+
             yPercent
+
         ) {
 
+
             if (!supabaseClient) {
+
                 return;
+
             }
 
 
             const {
                 error
             } =
+
                 await supabaseClient
-                    .from("pops")
+
+                    .from(
+                        "pops"
+                    )
+
                     .update({
 
                         x_percent:
@@ -766,6 +1229,7 @@
                             yPercent
 
                     })
+
                     .eq(
                         "id",
                         id
@@ -774,28 +1238,30 @@
 
             if (error) {
 
+
                 console.error(
+
                     "Position update failed:",
+
                     error
+
                 );
 
+
             }
+
 
         }
 
 
-        /* =========================================================
+        /* =====================================================
            DRAGGING
-
-           Pointer Events work for BOTH:
-           - mouse
-           - touch
-           - stylus
-        ========================================================= */
+        ===================================================== */
 
         function setupElementDraggability(
             element
         ) {
+
 
             let dragging =
                 false;
@@ -814,92 +1280,129 @@
 
 
             element.addEventListener(
+
                 "pointerdown",
+
                 function (event) {
+
 
                     dragging =
                         true;
 
 
-                    element.classList.add(
-                        "dragging"
-                    );
+                    element
+                        .classList
+                        .add(
+                            "dragging"
+                        );
 
 
-                    element.setPointerCapture(
-                        event.pointerId
-                    );
+                    element
+                        .setPointerCapture(
+                            event.pointerId
+                        );
 
 
                     const rect =
-                        element.getBoundingClientRect();
+
+                        element
+                            .getBoundingClientRect();
 
 
                     offsetX =
+
                         event.clientX -
                         rect.left;
 
 
                     offsetY =
+
                         event.clientY -
                         rect.top;
 
 
                     event.preventDefault();
 
+
                 }
+
             );
 
 
             element.addEventListener(
+
                 "pointermove",
+
                 function (event) {
 
+
                     if (!dragging) {
+
                         return;
+
                     }
 
 
                     const maxX =
+
                         Math.max(
+
                             0,
+
                             window.innerWidth -
                             element.offsetWidth
+
                         );
 
 
                     const maxY =
+
                         Math.max(
+
                             0,
+
                             window.innerHeight -
                             element.offsetHeight
+
                         );
 
 
                     const newX =
+
                         clamp(
+
                             event.clientX -
                             offsetX,
+
                             0,
+
                             maxX
+
                         );
 
 
                     const newY =
+
                         clamp(
+
                             event.clientY -
                             offsetY,
+
                             0,
+
                             maxY
+
                         );
 
 
                     const xPercent =
+
                         newX /
                         window.innerWidth;
 
 
                     const yPercent =
+
                         newY /
                         window.innerHeight;
 
@@ -920,39 +1423,39 @@
                         yPercent;
 
 
-                    /*
-                        Send movement approximately
-                        10 times per second.
-
-                        This makes dragging appear live
-                        on other people's screens
-                        without sending hundreds of
-                        database updates every second.
-                    */
-
                     const now =
                         Date.now();
 
 
                     if (
+
                         now -
                         lastSyncTime >=
                         100
+
                     ) {
+
 
                         lastSyncTime =
                             now;
 
 
                         syncPosition(
+
                             element.id,
+
                             xPercent,
+
                             yPercent
+
                         );
+
 
                     }
 
+
                 }
+
             );
 
 
@@ -960,8 +1463,11 @@
                 event
             ) {
 
+
                 if (!dragging) {
+
                     return;
+
                 }
 
 
@@ -969,79 +1475,253 @@
                     false;
 
 
-                element.classList.remove(
-                    "dragging"
-                );
+                element
+                    .classList
+                    .remove(
+                        "dragging"
+                    );
 
 
                 try {
 
+
                     if (
-                        element.hasPointerCapture(
-                            event.pointerId
-                        )
+
+                        element
+                            .hasPointerCapture(
+                                event.pointerId
+                            )
+
                     ) {
 
-                        element.releasePointerCapture(
-                            event.pointerId
-                        );
+
+                        element
+                            .releasePointerCapture(
+                                event.pointerId
+                            );
+
 
                     }
+
 
                 }
 
                 catch (error) {
-                    // Safe to ignore.
+
                 }
 
 
                 const xPercent =
+
                     Number(
-                        element.dataset.xPercent
+                        element
+                            .dataset
+                            .xPercent
                     );
 
 
                 const yPercent =
+
                     Number(
-                        element.dataset.yPercent
+                        element
+                            .dataset
+                            .yPercent
                     );
 
 
                 await syncPosition(
+
                     element.id,
+
                     xPercent,
+
                     yPercent
+
                 );
+
 
             }
 
 
             element.addEventListener(
+
                 "pointerup",
+
                 finishDrag
+
             );
 
 
             element.addEventListener(
+
                 "pointercancel",
+
                 finishDrag
+
             );
+
 
         }
 
 
-        /* =========================================================
+        /* =====================================================
+           DELETE OLD MESSAGES
+        ===================================================== */
+
+        async function trimOldMessages() {
+
+
+            if (!supabaseClient) {
+
+                return;
+
+            }
+
+
+            /*
+                Find messages older than the
+                configured MAX_MESSAGES amount.
+            */
+
+            const {
+                data,
+                error
+            } =
+
+                await supabaseClient
+
+                    .from(
+                        "pops"
+                    )
+
+                    .select(
+                        "id, created_at"
+                    )
+
+                    .order(
+                        "created_at",
+                        {
+                            ascending:
+                                false
+                        }
+                    );
+
+
+            if (error) {
+
+
+                console.error(
+
+                    "Could not check old messages:",
+
+                    error
+
+                );
+
+
+                return;
+
+
+            }
+
+
+            if (
+
+                data.length <=
+                MAX_MESSAGES
+
+            ) {
+
+
+                return;
+
+
+            }
+
+
+            const messagesToDelete =
+
+                data.slice(
+                    MAX_MESSAGES
+                );
+
+
+            const idsToDelete =
+
+                messagesToDelete.map(
+
+                    function (message) {
+
+                        return message.id;
+
+                    }
+
+                );
+
+
+            console.log(
+
+                "Removing old messages:",
+
+                idsToDelete.length
+
+            );
+
+
+            const {
+                error:
+                    deleteError
+            } =
+
+                await supabaseClient
+
+                    .from(
+                        "pops"
+                    )
+
+                    .delete()
+
+                    .in(
+                        "id",
+                        idsToDelete
+                    );
+
+
+            if (deleteError) {
+
+
+                console.error(
+
+                    "Could not delete old messages:",
+
+                    deleteError
+
+                );
+
+
+            }
+
+
+        }
+
+
+        /* =====================================================
            SEND MESSAGE
-        ========================================================= */
+        ===================================================== */
 
         async function sendMessage() {
 
+
             const text =
-                input.value.trim();
+                input
+                    .value
+                    .trim();
 
 
             if (!text) {
+
                 return;
+
             }
 
 
@@ -1049,41 +1729,53 @@
 
 
             const id =
+
                 "pop_" +
                 crypto.randomUUID();
 
 
             const payload = {
 
-                id: id,
 
-                text: text,
+                id:
+                    id,
+
+
+                text:
+                    text,
+
 
                 xPercent:
+
                     Math.random() *
                     0.65 +
                     0.05,
 
+
                 yPercent:
+
                     Math.random() *
                     0.60 +
                     0.05,
 
+
                 bold:
+
                     currentStyles.bold,
 
+
                 italic:
+
                     currentStyles.italic,
 
+
                 underline:
+
                     currentStyles.underline
+
 
             };
 
-
-            /*
-                Show it instantly on sender's screen.
-            */
 
             renderMessage(
                 payload
@@ -1096,94 +1788,147 @@
 
             if (!supabaseClient) {
 
+
                 console.error(
-                    "Supabase is not initialized."
+                    "Supabase unavailable."
                 );
 
+
                 return;
+
+
             }
 
 
             const {
                 error
             } =
+
                 await supabaseClient
-                    .from("pops")
+
+                    .from(
+                        "pops"
+                    )
+
                     .insert({
+
 
                         id:
                             payload.id,
 
+
                         text:
                             payload.text,
+
 
                         x_percent:
                             payload.xPercent,
 
+
                         y_percent:
                             payload.yPercent,
+
 
                         bold:
                             payload.bold,
 
+
                         italic:
                             payload.italic,
 
+
                         underline:
                             payload.underline
+
 
                     });
 
 
             if (error) {
 
+
                 console.error(
+
                     "Insert failed:",
+
                     error
+
                 );
 
 
                 alert(
-                    "Message appeared locally, " +
-                    "but Supabase could not save it. " +
-                    "Open F12 → Console."
+
+                    "Message appeared locally but could not save."
+
                 );
 
+
+                return;
+
+
             }
+
+
+            /*
+                After saving the new message,
+                enforce MAX_MESSAGES.
+            */
+
+            await trimOldMessages();
+
 
         }
 
 
-        /* =========================================================
-           LOAD EXISTING POPS
-        ========================================================= */
+        /* =====================================================
+           LOAD EXISTING
+        ===================================================== */
 
         async function loadExistingPops() {
+
 
             const {
                 data,
                 error
             } =
+
                 await supabaseClient
-                    .from("pops")
-                    .select("*")
+
+                    .from(
+                        "pops"
+                    )
+
+                    .select(
+                        "*"
+                    )
+
                     .order(
                         "created_at",
                         {
-                            ascending: true
+                            ascending:
+                                true
                         }
                     )
-                    .limit(200);
+
+                    .limit(
+                        MAX_MESSAGES
+                    );
 
 
             if (error) {
 
+
                 console.error(
+
                     "Could not load pops:",
+
                     error
+
                 );
 
+
                 return;
+
 
             }
 
@@ -1192,75 +1937,100 @@
                 const pop of data
             ) {
 
+
                 renderMessage(
+
+
                     {
+
 
                         id:
                             pop.id,
 
+
                         text:
                             pop.text,
+
 
                         xPercent:
                             pop.x_percent,
 
+
                         yPercent:
                             pop.y_percent,
+
 
                         bold:
                             pop.bold,
 
+
                         italic:
                             pop.italic,
+
 
                         underline:
                             pop.underline
 
+
                     },
+
 
                     true
 
+
                 );
 
+
             }
+
 
         }
 
 
-        /* =========================================================
+        /* =====================================================
            REALTIME
-        ========================================================= */
+        ===================================================== */
 
         function startRealtime() {
 
+
             supabaseClient
+
                 .channel(
                     "universal-pop-wall"
                 )
 
 
-                /* -------------------------
-                   NEW POP
-                ------------------------- */
+                /* ==========================
+                   INSERT
+                ========================== */
 
                 .on(
 
+
                     "postgres_changes",
 
+
                     {
+
 
                         event:
                             "INSERT",
 
+
                         schema:
                             "public",
+
 
                         table:
                             "pops"
 
+
                     },
 
+
                     function (payload) {
+
 
                         const pop =
                             payload.new;
@@ -1268,56 +2038,74 @@
 
                         renderMessage({
 
+
                             id:
                                 pop.id,
+
 
                             text:
                                 pop.text,
 
+
                             xPercent:
                                 pop.x_percent,
+
 
                             yPercent:
                                 pop.y_percent,
 
+
                             bold:
                                 pop.bold,
+
 
                             italic:
                                 pop.italic,
 
+
                             underline:
                                 pop.underline
 
+
                         });
 
+
                     }
+
 
                 )
 
 
-                /* -------------------------
-                   MOVED POP
-                ------------------------- */
+                /* ==========================
+                   UPDATE
+                ========================== */
 
                 .on(
 
+
                     "postgres_changes",
 
+
                     {
+
 
                         event:
                             "UPDATE",
 
+
                         schema:
                             "public",
+
 
                         table:
                             "pops"
 
+
                     },
 
+
                     function (payload) {
+
 
                         const pop =
                             payload.new;
@@ -1325,152 +2113,290 @@
 
                         updateElementPosition(
 
+
                             pop.id,
+
 
                             pop.x_percent,
 
+
                             pop.y_percent
+
 
                         );
 
+
                     }
+
 
                 )
 
 
-                /* -------------------------
+                /* ==========================
+                   DELETE
+                ========================== */
+
+                .on(
+
+
+                    "postgres_changes",
+
+
+                    {
+
+
+                        event:
+                            "DELETE",
+
+
+                        schema:
+                            "public",
+
+
+                        table:
+                            "pops"
+
+
+                    },
+
+
+                    function (payload) {
+
+
+                        const deleted =
+                            payload.old;
+
+
+                        const element =
+
+                            document
+                                .getElementById(
+                                    deleted.id
+                                );
+
+
+                        if (element) {
+
+
+                            element.remove();
+
+
+                        }
+
+
+                    }
+
+
+                )
+
+
+                /* ==========================
                    CONNECTION
-                ------------------------- */
+                ========================== */
 
                 .subscribe(
 
+
                     function (status) {
 
+
                         console.log(
+
                             "Realtime status:",
+
                             status
+
                         );
 
 
                         if (
+
                             status ===
                             "SUBSCRIBED"
+
                         ) {
 
-                            connectionStatus.innerText =
+
+                            connectionStatus
+                                .innerText =
                                 "● LIVE";
 
+
                         }
 
+
                         else if (
+
                             status ===
                             "CHANNEL_ERROR"
+
                         ) {
 
-                            connectionStatus.innerText =
+
+                            connectionStatus
+                                .innerText =
                                 "Realtime error";
 
+
                         }
 
+
                         else if (
+
                             status ===
                             "TIMED_OUT"
+
                         ) {
 
-                            connectionStatus.innerText =
+
+                            connectionStatus
+                                .innerText =
                                 "Connection timed out";
 
+
                         }
+
 
                         else if (
+
                             status ===
                             "CLOSED"
+
                         ) {
 
-                            connectionStatus.innerText =
+
+                            connectionStatus
+                                .innerText =
                                 "Disconnected";
 
+
                         }
+
 
                     }
 
+
                 );
+
 
         }
 
 
-        /* =========================================================
+        /* =====================================================
            ENTER KEY
-        ========================================================= */
+        ===================================================== */
 
         input.addEventListener(
+
+
             "keydown",
+
+
             function (event) {
 
+
                 if (
+
                     event.key ===
                     "Enter"
+
                 ) {
+
 
                     sendMessage();
 
+
                 }
 
+
             }
+
+
         );
 
 
-        /* =========================================================
+        /* =====================================================
            WINDOW RESIZE
-        ========================================================= */
+        ===================================================== */
 
         window.addEventListener(
+
+
             "resize",
+
+
             function () {
 
+
                 const messages =
-                    document.querySelectorAll(
-                        ".popped-msg"
-                    );
+
+                    document
+                        .querySelectorAll(
+                            ".popped-msg"
+                        );
 
 
                 messages.forEach(
+
+
                     function (element) {
 
+
                         const xPercent =
+
                             Number(
-                                element.dataset.xPercent
+
+                                element
+                                    .dataset
+                                    .xPercent
+
                             );
 
 
                         const yPercent =
+
                             Number(
-                                element.dataset.yPercent
+
+                                element
+                                    .dataset
+                                    .yPercent
+
                             );
 
 
                         updateElementPosition(
 
+
                             element.id,
+
 
                             xPercent,
 
+
                             yPercent
+
 
                         );
 
+
                     }
+
+
                 );
 
+
             }
+
+
         );
 
 
-        /* =========================================================
-           APP START
-        ========================================================= */
+        /* =====================================================
+           START APPLICATION
+        ===================================================== */
 
         async function startApp() {
+
 
             const success =
                 initializeSupabase();
@@ -1478,29 +2404,52 @@
 
             if (!success) {
 
+
                 sendButton.disabled =
                     true;
 
+
                 return;
+
 
             }
 
 
-            connectionStatus.innerText =
+            connectionStatus
+                .innerText =
                 "Loading wall...";
 
+
+            /*
+                Clean the database first,
+                according to config.js.
+            */
+
+            await trimOldMessages();
+
+
+            /*
+                Load remaining messages.
+            */
 
             await loadExistingPops();
 
 
+            /*
+                Connect realtime.
+            */
+
             startRealtime();
+
 
         }
 
 
         startApp();
 
+
     </script>
+
 
 </body>
 
