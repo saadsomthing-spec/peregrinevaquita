@@ -885,179 +885,166 @@
         /* ============================================
            ADMIN FUNCTION LOADER
         ============================================ */
+async function loadAdminFunctions() {
 
-        async function loadAdminFunctions() {
+    adminOutput.innerText =
+        "Scanning ADMIN-FUNCTION...";
 
 
-            adminOutput.innerText =
-                "Scanning ADMIN-FUNCTION...";
+    try {
 
+        const response =
+            await fetch(
+                "/api/admin-functions",
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.error
+            );
+
+        }
+
+
+        adminCommands.clear();
+
+        adminCommandList.innerHTML =
+            "";
+
+
+        for (
+            const file
+            of result.files
+        ) {
 
             try {
 
-
-                const response =
-                    await fetch(
-
-                        "/api/admin-functions",
-
-                        {
-                            cache:
-                                "no-store"
-                        }
-
+                const module =
+                    await import(
+                        `/ADMIN-FUNCTION/${file}?v=${Date.now()}`
                     );
-
-
-                const result =
-                    await response.json();
 
 
                 if (
-                    !result.success
+                    !Array.isArray(
+                        module.commands
+                    )
                 ) {
 
-                    throw new Error(
-                        result.error
+                    console.warn(
+                        file,
+                        "does not export a commands array."
                     );
 
+                    continue;
+
                 }
-
-
-                adminCommands.clear();
-
-
-                adminCommandList.innerHTML =
-                    "";
 
 
                 for (
-                    const file
-                    of result.files
+                    const command
+                    of module.commands
                 ) {
 
+                    if (
+                        !command ||
+                        !command.name ||
+                        typeof command.run !==
+                        "function"
+                    ) {
 
-                    try {
-
-
-                        const module =
-                            await import(
-
-                                `/ADMIN-FUNCTION/${file}?v=${Date.now()}`
-
-                            );
-
-
-                        if (
-                            typeof module.command !==
-                            "object"
-                        ) {
-
-                            console.warn(
-
-                                file,
-
-                                "does not export command."
-
-                            );
-
-
-                            continue;
-
-                        }
-
-
-                        if (
-                            !module.command.name ||
-                            typeof module.command.run !==
-                            "function"
-                        ) {
-
-                            console.warn(
-
-                                file,
-
-                                "has an invalid command format."
-
-                            );
-
-
-                            continue;
-
-                        }
-
-
-                        adminCommands.set(
-
-                            module.command.name,
-
-                            module.command
-
-                        );
-
-
-                        const option =
-                            document.createElement(
-                                "option"
-                            );
-
-
-                        option.value =
-                            module.command.name;
-
-
-                        adminCommandList
-                            .appendChild(
-                                option
-                            );
-
-
-                    }
-
-                    catch (error) {
-
-
-                        console.error(
-
-                            "Could not load:",
-
+                        console.warn(
                             file,
-
-                            error
-
+                            "contains an invalid command."
                         );
 
+                        continue;
 
                     }
 
+
+                    if (
+                        adminCommands.has(
+                            command.name
+                        )
+                    ) {
+
+                        console.warn(
+                            "Duplicate command:",
+                            command.name
+                        );
+
+                        continue;
+
+                    }
+
+
+                    adminCommands.set(
+                        command.name,
+                        command
+                    );
+
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        command.name;
+
+
+                    adminCommandList
+                        .appendChild(
+                            option
+                        );
 
                 }
-
-
-                adminOutput.innerText =
-
-                    `${adminCommands.size} commands loaded.`;
-
 
             }
 
             catch (error) {
 
-
                 console.error(
+                    "Could not load:",
+                    file,
                     error
                 );
 
-
-                adminOutput.innerText =
-
-                    "Could not load admin commands.";
-
-
             }
 
-
         }
+
+
+        adminOutput.innerText =
+            `${adminCommands.size} commands loaded.`;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        adminOutput.innerText =
+            "Could not load admin commands.";
+
+    }
+
+}
 
 
         /* ============================================
