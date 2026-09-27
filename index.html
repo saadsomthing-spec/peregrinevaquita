@@ -15,16 +15,11 @@
         Family Pop Wall
     </title>
 
-
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
-
-    <script
-        src="config.js"
-    ></script>
-
+    <script src="config.js"></script>
 
     <style>
 
@@ -32,23 +27,16 @@
             box-sizing: border-box;
         }
 
-
         html,
         body {
-
             margin: 0;
-
             padding: 0;
 
             width: 100%;
-
             height: 100%;
-
         }
 
-
         body {
-
             font-family:
                 "Segoe UI",
                 Arial,
@@ -61,52 +49,37 @@
                 hidden;
 
             transition:
-                background
-                0.3s ease;
-
+                background 0.3s ease;
         }
-
 
         body.dark {
-
             background:
                 #111827;
-
         }
 
 
-        /* ============================================
+        /* =====================================================
            WALL
-        ============================================ */
+        ===================================================== */
 
         #canvas-wall {
+            position: fixed;
 
-            position:
-                fixed;
+            inset: 0;
 
-            inset:
-                0;
-
-            overflow:
-                hidden;
-
+            overflow: hidden;
         }
 
 
-        /* ============================================
-           LIVE STATUS
-        ============================================ */
+        /* =====================================================
+           CONNECTION STATUS
+        ===================================================== */
 
         #connection-status {
+            position: fixed;
 
-            position:
-                fixed;
-
-            top:
-                15px;
-
-            left:
-                50%;
+            top: 15px;
+            left: 50%;
 
             transform:
                 translateX(-50%);
@@ -122,12 +95,7 @@
 
             box-shadow:
                 0 3px 12px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.12
-                );
+                rgba(0,0,0,0.12);
 
             font-size:
                 12px;
@@ -137,16 +105,14 @@
 
             z-index:
                 5000;
-
         }
 
 
-        /* ============================================
+        /* =====================================================
            MESSAGES
-        ============================================ */
+        ===================================================== */
 
         .popped-msg {
-
             position:
                 absolute;
 
@@ -167,12 +133,7 @@
 
             box-shadow:
                 0 5px 15px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.14
-                );
+                rgba(0,0,0,0.14);
 
             font-size:
                 17px;
@@ -205,28 +166,35 @@
                     1.275
                 )
                 forwards;
-
         }
 
+        .popped-msg.dragging {
+            cursor:
+                grabbing;
+
+            z-index:
+                1000;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.25);
+        }
 
         @keyframes popIn {
 
             to {
-
                 transform:
                     scale(1);
-
             }
 
         }
 
 
-        /* ============================================
-           NORMAL CONTROL PANEL
-        ============================================ */
+        /* =====================================================
+           NORMAL CONTROLS
+        ===================================================== */
 
         #control-panel {
-
             position:
                 fixed;
 
@@ -259,21 +227,13 @@
 
             box-shadow:
                 0 10px 35px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.18
-                );
+                rgba(0,0,0,0.18);
 
             z-index:
                 5000;
-
         }
 
-
         #msg-input {
-
             width:
                 270px;
 
@@ -292,12 +252,9 @@
 
             font-size:
                 15px;
-
         }
 
-
         .format-btn {
-
             width:
                 40px;
 
@@ -319,23 +276,17 @@
 
             font-size:
                 16px;
-
         }
 
-
         .format-btn.active {
-
             background:
                 #222;
 
             color:
                 white;
-
         }
 
-
         #send-btn {
-
             height:
                 40px;
 
@@ -359,16 +310,14 @@
 
             cursor:
                 pointer;
-
         }
 
 
-        /* ============================================
-           ADMIN CONSOLE
-        ============================================ */
+        /* =====================================================
+           ADMIN
+        ===================================================== */
 
         #admin-panel {
-
             position:
                 fixed;
 
@@ -400,32 +349,21 @@
 
             box-shadow:
                 0 20px 60px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.45
-                );
+                rgba(0,0,0,0.45);
 
             display:
                 none;
 
             z-index:
                 10000;
-
         }
-
 
         #admin-panel.open {
-
             display:
                 block;
-
         }
 
-
         #admin-header {
-
             display:
                 flex;
 
@@ -437,12 +375,9 @@
 
             margin-bottom:
                 15px;
-
         }
 
-
         #admin-close {
-
             background:
                 transparent;
 
@@ -457,12 +392,9 @@
 
             cursor:
                 pointer;
-
         }
 
-
         .admin-label {
-
             display:
                 block;
 
@@ -480,12 +412,9 @@
 
             font-weight:
                 bold;
-
         }
 
-
         .admin-input {
-
             width:
                 100%;
 
@@ -507,12 +436,9 @@
 
             outline:
                 none;
-
         }
 
-
         #admin-run {
-
             width:
                 100%;
 
@@ -539,12 +465,9 @@
 
             cursor:
                 pointer;
-
         }
 
-
         #admin-output {
-
             margin-top:
                 14px;
 
@@ -565,45 +488,30 @@
 
             font-size:
                 12px;
-
         }
 
 
-        @media (
-            max-width: 700px
-        ) {
+        @media (max-width: 700px) {
 
             #control-panel {
-
                 width:
-                    calc(
-                        100% - 20px
-                    );
+                    calc(100% - 20px);
 
                 flex-wrap:
                     wrap;
-
             }
-
 
             #msg-input {
-
                 width:
                     100%;
-
             }
 
-
             #admin-panel {
-
                 width:
-                    calc(
-                        100% - 20px
-                    );
+                    calc(100% - 20px);
 
                 right:
                     10px;
-
             }
 
         }
@@ -616,21 +524,15 @@
 <body>
 
 
-    <div
-        id="canvas-wall"
-    ></div>
+    <div id="canvas-wall"></div>
 
 
-    <div
-        id="connection-status"
-    >
+    <div id="connection-status">
         Connecting...
     </div>
 
 
-    <div
-        id="control-panel"
-    >
+    <div id="control-panel">
 
         <input
             id="msg-input"
@@ -678,17 +580,9 @@
     </div>
 
 
-    <!-- ============================================
-         ADMIN PANEL
-    ============================================= -->
+    <div id="admin-panel">
 
-    <div
-        id="admin-panel"
-    >
-
-        <div
-            id="admin-header"
-        >
+        <div id="admin-header">
 
             <strong>
                 ⚡ ADMIN CONSOLE
@@ -705,9 +599,7 @@
         </div>
 
 
-        <label
-            class="admin-label"
-        >
+        <label class="admin-label">
             Command
         </label>
 
@@ -726,9 +618,7 @@
         ></datalist>
 
 
-        <label
-            class="admin-label"
-        >
+        <label class="admin-label">
             Value
         </label>
 
@@ -749,9 +639,7 @@
         </button>
 
 
-        <div
-            id="admin-output"
-        >
+        <div id="admin-output">
             Loading commands...
         </div>
 
@@ -761,9 +649,9 @@
     <script type="module">
 
 
-        /* ============================================
-           GLOBAL REFERENCES
-        ============================================ */
+        /* =====================================================
+           REFERENCES
+        ===================================================== */
 
         const wall =
             document.getElementById(
@@ -813,17 +701,31 @@
             );
 
 
-        /* ============================================
-           ADMIN PASSWORD
-        ============================================ */
+        /* =====================================================
+           SETTINGS
+        ===================================================== */
 
         const ADMIN_SECRET =
             "peregrinefalcsonissohandsome";
 
 
-        /* ============================================
-           APP STATE
-        ============================================ */
+        const MAX_MESSAGES =
+            Math.max(
+
+                1,
+
+                Number(
+                    window
+                        .SUPABASE_CONFIG
+                        ?.MAX_MESSAGES
+                ) || 10
+
+            );
+
+
+        /* =====================================================
+           STATE
+        ===================================================== */
 
         let supabaseClient =
             null;
@@ -835,33 +737,39 @@
 
         let currentStyles = {
 
-            bold: false,
+            bold:
+                false,
 
-            italic: false,
+            italic:
+                false,
 
-            underline: false
+            underline:
+                false
 
         };
 
-
-        /*
-            This Map contains ALL dynamically
-            discovered admin commands.
-
-            Example:
-
-            adminCommands.get("shake-wall")
-        */
 
         const adminCommands =
             new Map();
 
 
-        /* ============================================
-           SUPABASE INITIALIZATION
-        ============================================ */
+        /* =====================================================
+           SUPABASE
+        ===================================================== */
 
         function initializeSupabase() {
+
+            if (
+                !window.supabase ||
+                !window.SUPABASE_CONFIG
+            ) {
+
+                connectionStatus.innerText =
+                    "Supabase error";
+
+                return false;
+
+            }
 
 
             supabaseClient =
@@ -879,184 +787,216 @@
                     );
 
 
-        }
-
-
-        /* ============================================
-           ADMIN FUNCTION LOADER
-        ============================================ */
-async function loadAdminFunctions() {
-
-    adminOutput.innerText =
-        "Scanning ADMIN-FUNCTION...";
-
-
-    try {
-
-        const response =
-            await fetch(
-                "/api/admin-functions",
-                {
-                    cache:
-                        "no-store"
-                }
-            );
-
-
-        const result =
-            await response.json();
-
-
-        if (!result.success) {
-
-            throw new Error(
-                result.error
-            );
+            return true;
 
         }
 
 
-        adminCommands.clear();
+        /* =====================================================
+           CLAMP
+        ===================================================== */
 
-        adminCommandList.innerHTML =
-            "";
-
-
-        for (
-            const file
-            of result.files
+        function clamp(
+            value,
+            minimum,
+            maximum
         ) {
+
+            return Math.min(
+
+                Math.max(
+                    value,
+                    minimum
+                ),
+
+                maximum
+
+            );
+
+        }
+
+
+        /* =====================================================
+           ADMIN PLUGIN LOADER
+        ===================================================== */
+
+        async function loadAdminFunctions() {
+
+            adminOutput.innerText =
+                "Scanning ADMIN-FUNCTION...";
+
 
             try {
 
-                const module =
-                    await import(
-                        `/ADMIN-FUNCTION/${file}?v=${Date.now()}`
+                const response =
+                    await fetch(
+
+                        "/api/admin-functions",
+
+                        {
+                            cache:
+                                "no-store"
+                        }
+
                     );
 
 
-                if (
-                    !Array.isArray(
-                        module.commands
-                    )
-                ) {
+                const result =
+                    await response.json();
 
-                    console.warn(
-                        file,
-                        "does not export a commands array."
+
+                if (!result.success) {
+
+                    throw new Error(
+                        result.error
                     );
-
-                    continue;
 
                 }
+
+
+                adminCommands.clear();
+
+                adminCommandList.innerHTML =
+                    "";
 
 
                 for (
-                    const command
-                    of module.commands
+                    const file
+                    of result.files
                 ) {
 
-                    if (
-                        !command ||
-                        !command.name ||
-                        typeof command.run !==
-                        "function"
-                    ) {
+                    try {
 
-                        console.warn(
+                        const module =
+                            await import(
+
+                                `/ADMIN-FUNCTION/${file}?v=${Date.now()}`
+
+                            );
+
+
+                        if (
+                            !Array.isArray(
+                                module.commands
+                            )
+                        ) {
+
+                            continue;
+
+                        }
+
+
+                        for (
+                            const command
+                            of module.commands
+                        ) {
+
+                            if (
+                                !command ||
+                                !command.name ||
+                                typeof command.run !==
+                                "function"
+                            ) {
+
+                                continue;
+
+                            }
+
+
+                            if (
+                                adminCommands.has(
+                                    command.name
+                                )
+                            ) {
+
+                                console.warn(
+
+                                    "Duplicate command:",
+
+                                    command.name
+
+                                );
+
+                                continue;
+
+                            }
+
+
+                            adminCommands.set(
+
+                                command.name,
+
+                                command
+
+                            );
+
+
+                            const option =
+                                document.createElement(
+                                    "option"
+                                );
+
+
+                            option.value =
+                                command.name;
+
+
+                            adminCommandList
+                                .appendChild(
+                                    option
+                                );
+
+                        }
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+
+                            "Could not load",
+
                             file,
-                            "contains an invalid command."
-                        );
 
-                        continue;
+                            error
+
+                        );
 
                     }
-
-
-                    if (
-                        adminCommands.has(
-                            command.name
-                        )
-                    ) {
-
-                        console.warn(
-                            "Duplicate command:",
-                            command.name
-                        );
-
-                        continue;
-
-                    }
-
-
-                    adminCommands.set(
-                        command.name,
-                        command
-                    );
-
-
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
-
-
-                    option.value =
-                        command.name;
-
-
-                    adminCommandList
-                        .appendChild(
-                            option
-                        );
 
                 }
+
+
+                adminOutput.innerText =
+
+                    `${adminCommands.size} commands loaded.`;
 
             }
 
             catch (error) {
 
                 console.error(
-                    "Could not load:",
-                    file,
                     error
                 );
+
+
+                adminOutput.innerText =
+                    "Could not load commands.";
 
             }
 
         }
 
 
-        adminOutput.innerText =
-            `${adminCommands.size} commands loaded.`;
-
-    }
-
-    catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        adminOutput.innerText =
-            "Could not load admin commands.";
-
-    }
-
-}
-
-
-        /* ============================================
-           SECRET ADMIN DETECTION
-        ============================================ */
+        /* =====================================================
+           ADMIN SECRET
+        ===================================================== */
 
         input.addEventListener(
 
             "input",
 
             function() {
-
 
                 if (
 
@@ -1067,16 +1007,12 @@ async function loadAdminFunctions() {
 
                 ) {
 
-
                     input.value =
                         "";
 
-
                     openAdmin();
 
-
                 }
-
 
             }
 
@@ -1085,7 +1021,6 @@ async function loadAdminFunctions() {
 
         function openAdmin() {
 
-
             adminPanel
                 .classList
                 .add(
@@ -1093,15 +1028,12 @@ async function loadAdminFunctions() {
                 );
 
 
-            adminCommandInput
-                .focus();
-
+            adminCommandInput.focus();
 
         }
 
 
         function closeAdmin() {
-
 
             adminPanel
                 .classList
@@ -1110,15 +1042,16 @@ async function loadAdminFunctions() {
                 );
 
 
+            input.focus();
+
         }
 
 
-        /* ============================================
-           RUN ADMIN COMMAND
-        ============================================ */
+        /* =====================================================
+           ADMIN RUNNER
+        ===================================================== */
 
         async function runAdminCommand() {
-
 
             const name =
                 adminCommandInput
@@ -1140,13 +1073,10 @@ async function loadAdminFunctions() {
 
             if (!command) {
 
-
                 adminOutput.innerText =
                     "Unknown command.";
 
-
                 return;
-
 
             }
 
@@ -1157,13 +1087,7 @@ async function loadAdminFunctions() {
 
             try {
 
-
-                /*
-                    Every command receives this
-                    shared context object.
-                */
-
-                const context = {
+                await command.run({
 
                     value:
                         value,
@@ -1204,31 +1128,11 @@ async function loadAdminFunctions() {
 
                         }
 
-                };
-
-
-                await command.run(
-                    context
-                );
-
-
-                if (
-                    adminOutput.innerText ===
-                    `Running ${name}...`
-                ) {
-
-
-                    adminOutput.innerText =
-                        `${name} completed.`;
-
-
-                }
-
+                });
 
             }
 
             catch (error) {
-
 
                 console.error(
                     error
@@ -1236,8 +1140,7 @@ async function loadAdminFunctions() {
 
 
                 adminOutput.innerText =
-                    `ERROR: ${error.message}`;
-
+                    error.message;
 
             }
 
@@ -1245,17 +1148,17 @@ async function loadAdminFunctions() {
             adminCommandInput.value =
                 "";
 
-
             adminValueInput.value =
                 "";
 
+            adminCommandInput.focus();
 
         }
 
 
-        /* ============================================
-           UNIVERSAL COMMAND BROADCAST
-        ============================================ */
+        /* =====================================================
+           UNIVERSAL ADMIN BROADCAST
+        ===================================================== */
 
         async function broadcastAdminCommand(
 
@@ -1265,40 +1168,43 @@ async function loadAdminFunctions() {
 
         ) {
 
+            if (!realtimeChannel) {
 
-            await realtimeChannel
-                .send({
+                return;
 
-                    type:
-                        "broadcast",
+            }
 
-                    event:
-                        "admin-plugin-command",
 
-                    payload: {
+            await realtimeChannel.send({
 
-                        command:
-                            command,
+                type:
+                    "broadcast",
 
-                        data:
-                            payload
+                event:
+                    "admin-plugin-command",
 
-                    }
+                payload: {
 
-                });
+                    command:
+                        command,
 
+                    data:
+                        payload
+
+                }
+
+            });
 
         }
 
 
-        /* ============================================
-           RECEIVE UNIVERSAL COMMAND
-        ============================================ */
+        /* =====================================================
+           RECEIVE ADMIN COMMAND
+        ===================================================== */
 
         async function receiveAdminCommand(
             response
         ) {
-
 
             const name =
                 response
@@ -1331,20 +1237,16 @@ async function loadAdminFunctions() {
 
             try {
 
-
                 await command.receive({
 
                     data:
                         data,
 
-
                     wall:
                         wall,
 
-
                     supabase:
                         supabaseClient,
-
 
                     getMessages:
                         function() {
@@ -1358,35 +1260,30 @@ async function loadAdminFunctions() {
 
                 });
 
-
             }
 
             catch (error) {
 
-
                 console.error(
 
-                    `Remote command ${name} failed:`,
+                    "Remote admin command failed:",
 
                     error
 
                 );
 
-
             }
-
 
         }
 
 
-        /* ============================================
-           STYLE BUTTONS
-        ============================================ */
+        /* =====================================================
+           FORMATTING
+        ===================================================== */
 
         function toggleStyle(
             style
         ) {
-
 
             currentStyles[style] =
                 !currentStyles[style];
@@ -1394,10 +1291,8 @@ async function loadAdminFunctions() {
 
             document
                 .getElementById(
-
                     style +
                     "-btn"
-
                 )
                 .classList
                 .toggle(
@@ -1410,24 +1305,129 @@ async function loadAdminFunctions() {
 
                 );
 
+        }
+
+
+        /* =====================================================
+           POSITION MESSAGE
+        ===================================================== */
+
+        function updateElementPosition(
+
+            id,
+
+            xPercent,
+
+            yPercent
+
+        ) {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+
+            if (!element) {
+
+                return;
+
+            }
+
+
+            element.dataset.xPercent =
+                xPercent;
+
+
+            element.dataset.yPercent =
+                yPercent;
+
+
+            const maximumX =
+                Math.max(
+
+                    0,
+
+                    window.innerWidth -
+                    element.offsetWidth
+
+                );
+
+
+            const maximumY =
+                Math.max(
+
+                    0,
+
+                    window.innerHeight -
+                    element.offsetHeight
+
+                );
+
+
+            const x =
+                clamp(
+
+                    xPercent *
+                    window.innerWidth,
+
+                    0,
+
+                    maximumX
+
+                );
+
+
+            const y =
+                clamp(
+
+                    yPercent *
+                    window.innerHeight,
+
+                    0,
+
+                    maximumY
+
+                );
+
+
+            element.style.left =
+                x +
+                "px";
+
+
+            element.style.top =
+                y +
+                "px";
 
         }
 
 
-        /* ============================================
-           RENDER MESSAGE
-        ============================================ */
+        /* =====================================================
+           RENDER
+        ===================================================== */
 
         function renderMessage(
             message
         ) {
 
-
-            if (
+            const existing =
                 document.getElementById(
                     message.id
-                )
-            ) {
+                );
+
+
+            if (existing) {
+
+                updateElementPosition(
+
+                    message.id,
+
+                    message.xPercent,
+
+                    message.yPercent
+
+                );
 
                 return;
 
@@ -1450,22 +1450,6 @@ async function loadAdminFunctions() {
 
             element.innerText =
                 message.text;
-
-
-            element.style.left =
-                (
-                    message.xPercent *
-                    window.innerWidth
-                ) +
-                "px";
-
-
-            element.style.top =
-                (
-                    message.yPercent *
-                    window.innerHeight
-                ) +
-                "px";
 
 
             if (
@@ -1503,22 +1487,31 @@ async function loadAdminFunctions() {
             );
 
 
+            updateElementPosition(
+
+                message.id,
+
+                message.xPercent,
+
+                message.yPercent
+
+            );
+
+
             makeDraggable(
                 element
             );
 
-
         }
 
 
-        /* ============================================
+        /* =====================================================
            DRAGGING
-        ============================================ */
+        ===================================================== */
 
         function makeDraggable(
             element
         ) {
-
 
             let dragging =
                 false;
@@ -1532,15 +1525,23 @@ async function loadAdminFunctions() {
                 0;
 
 
+            let lastSync =
+                0;
+
+
             element.addEventListener(
 
                 "pointerdown",
 
                 function(event) {
 
-
                     dragging =
                         true;
+
+
+                    element.classList.add(
+                        "dragging"
+                    );
 
 
                     const rect =
@@ -1558,11 +1559,12 @@ async function loadAdminFunctions() {
                         rect.top;
 
 
-                    element
-                        .setPointerCapture(
-                            event.pointerId
-                        );
+                    element.setPointerCapture(
+                        event.pointerId
+                    );
 
+
+                    event.preventDefault();
 
                 }
 
@@ -1575,7 +1577,6 @@ async function loadAdminFunctions() {
 
                 function(event) {
 
-
                     if (!dragging) {
 
                         return;
@@ -1584,13 +1585,41 @@ async function loadAdminFunctions() {
 
 
                     const x =
-                        event.clientX -
-                        offsetX;
+                        clamp(
+
+                            event.clientX -
+                            offsetX,
+
+                            0,
+
+                            window.innerWidth -
+                            element.offsetWidth
+
+                        );
 
 
                     const y =
-                        event.clientY -
-                        offsetY;
+                        clamp(
+
+                            event.clientY -
+                            offsetY,
+
+                            0,
+
+                            window.innerHeight -
+                            element.offsetHeight
+
+                        );
+
+
+                    const xPercent =
+                        x /
+                        window.innerWidth;
+
+
+                    const yPercent =
+                        y /
+                        window.innerHeight;
 
 
                     element.style.left =
@@ -1603,73 +1632,169 @@ async function loadAdminFunctions() {
                         "px";
 
 
+                    element.dataset.xPercent =
+                        xPercent;
+
+
+                    element.dataset.yPercent =
+                        yPercent;
+
+
+                    const now =
+                        Date.now();
+
+
+                    /*
+                        Update Supabase approximately
+                        every 100ms while dragging.
+
+                        This makes OTHER browsers see
+                        the message move live.
+                    */
+
+                    if (
+                        now -
+                        lastSync >=
+                        100
+                    ) {
+
+                        lastSync =
+                            now;
+
+
+                        syncPosition(
+
+                            element.id,
+
+                            xPercent,
+
+                            yPercent
+
+                        );
+
+                    }
+
                 }
 
+            );
+
+
+            async function finishDrag() {
+
+                if (!dragging) {
+
+                    return;
+
+                }
+
+
+                dragging =
+                    false;
+
+
+                element.classList.remove(
+                    "dragging"
+                );
+
+
+                await syncPosition(
+
+                    element.id,
+
+                    Number(
+                        element
+                            .dataset
+                            .xPercent
+                    ),
+
+                    Number(
+                        element
+                            .dataset
+                            .yPercent
+                    )
+
+                );
+
+            }
+
+
+            element.addEventListener(
+                "pointerup",
+                finishDrag
             );
 
 
             element.addEventListener(
-
-                "pointerup",
-
-                async function() {
-
-
-                    dragging =
-                        false;
-
-
-                    const rect =
-                        element
-                            .getBoundingClientRect();
-
-
-                    await supabaseClient
-
-                        .from(
-                            "pops"
-                        )
-
-                        .update({
-
-                            x_percent:
-
-                                rect.left /
-                                window.innerWidth,
-
-
-                            y_percent:
-
-                                rect.top /
-                                window.innerHeight
-
-                        })
-
-                        .eq(
-                            "id",
-                            element.id
-                        );
-
-
-                }
-
+                "pointercancel",
+                finishDrag
             );
-
 
         }
 
 
-        /* ============================================
+        /* =====================================================
+           SAVE POSITION
+        ===================================================== */
+
+        async function syncPosition(
+
+            id,
+
+            xPercent,
+
+            yPercent
+
+        ) {
+
+            const {
+                error
+            } =
+
+                await supabaseClient
+
+                    .from(
+                        "pops"
+                    )
+
+                    .update({
+
+                        x_percent:
+                            xPercent,
+
+                        y_percent:
+                            yPercent
+
+                    })
+
+                    .eq(
+                        "id",
+                        id
+                    );
+
+
+            if (error) {
+
+                console.error(
+
+                    "Position sync failed:",
+
+                    error
+
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
            SEND MESSAGE
-        ============================================ */
+        ===================================================== */
 
         async function sendMessage() {
 
-
             const text =
-                input
-                    .value
-                    .trim();
+                input.value.trim();
 
 
             if (!text) {
@@ -1680,7 +1805,7 @@ async function loadAdminFunctions() {
 
 
             /*
-                NEVER send admin password.
+                NEVER SEND ADMIN PASSWORD
             */
 
             if (
@@ -1688,16 +1813,12 @@ async function loadAdminFunctions() {
                 ADMIN_SECRET
             ) {
 
-
                 input.value =
                     "";
 
-
                 openAdmin();
 
-
                 return;
-
 
             }
 
@@ -1705,36 +1826,27 @@ async function loadAdminFunctions() {
             const message = {
 
                 id:
-
                     "pop_" +
                     crypto.randomUUID(),
-
 
                 text:
                     text,
 
-
                 xPercent:
-
                     Math.random() *
                     0.65 +
                     0.05,
 
-
                 yPercent:
-
                     Math.random() *
                     0.60 +
                     0.05,
 
-
                 bold:
                     currentStyles.bold,
 
-
                 italic:
                     currentStyles.italic,
-
 
                 underline:
                     currentStyles.underline
@@ -1751,56 +1863,195 @@ async function loadAdminFunctions() {
             );
 
 
-            await supabaseClient
+            const {
+                error
+            } =
 
-                .from(
-                    "pops"
-                )
+                await supabaseClient
 
-                .insert({
+                    .from(
+                        "pops"
+                    )
 
-                    id:
-                        message.id,
+                    .insert({
+
+                        id:
+                            message.id,
+
+                        text:
+                            message.text,
+
+                        x_percent:
+                            message.xPercent,
+
+                        y_percent:
+                            message.yPercent,
+
+                        bold:
+                            message.bold,
+
+                        italic:
+                            message.italic,
+
+                        underline:
+                            message.underline
+
+                    });
 
 
-                    text:
-                        message.text,
+            if (error) {
+
+                console.error(
+                    "Insert failed:",
+                    error
+                );
+
+                return;
+
+            }
 
 
-                    x_percent:
-                        message.xPercent,
+            /*
+                VERY IMPORTANT:
 
+                Every successful new message
+                immediately checks the DB limit.
+            */
 
-                    y_percent:
-                        message.yPercent,
-
-
-                    bold:
-                        message.bold,
-
-
-                    italic:
-                        message.italic,
-
-
-                    underline:
-                        message.underline
-
-                });
-
+            await trimOldMessages();
 
         }
 
 
-        /* ============================================
-           LOAD MESSAGES
-        ============================================ */
+        /* =====================================================
+           KEEP ONLY MAX_MESSAGES
+        ===================================================== */
 
-        async function loadMessages() {
+        async function trimOldMessages() {
+
+            const {
+                data,
+                error
+            } =
+
+                await supabaseClient
+
+                    .from(
+                        "pops"
+                    )
+
+                    .select(
+                        "id, created_at"
+                    )
+
+                    .order(
+                        "created_at",
+                        {
+                            ascending:
+                                false
+                        }
+                    );
+
+
+            if (error) {
+
+                console.error(
+
+                    "Could not check message limit:",
+
+                    error
+
+                );
+
+                return;
+
+            }
+
+
+            if (
+                data.length <=
+                MAX_MESSAGES
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+                Since newest is first:
+
+                positions 0 - 9 = KEEP
+                everything after = DELETE
+            */
+
+            const messagesToDelete =
+                data.slice(
+                    MAX_MESSAGES
+                );
+
+
+            const ids =
+                messagesToDelete.map(
+
+                    function(message) {
+
+                        return message.id;
+
+                    }
+
+                );
 
 
             const {
-                data
+                error:
+                    deleteError
+            } =
+
+                await supabaseClient
+
+                    .from(
+                        "pops"
+                    )
+
+                    .delete()
+
+                    .in(
+                        "id",
+                        ids
+                    );
+
+
+            if (deleteError) {
+
+                console.error(
+
+                    "Could not trim old messages:",
+
+                    deleteError
+
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           LOAD ONLY NEWEST MESSAGES
+        ===================================================== */
+
+        async function loadMessages() {
+
+            /*
+                IMPORTANT FIX:
+
+                Fetch newest first.
+            */
+
+            const {
+                data,
+                error
             } =
 
                 await supabaseClient
@@ -1814,73 +2065,78 @@ async function loadAdminFunctions() {
                     )
 
                     .order(
-
                         "created_at",
-
                         {
                             ascending:
-                                true
+                                false
                         }
+                    )
 
+                    .limit(
+                        MAX_MESSAGES
                     );
 
 
-            if (!data) {
+            if (error) {
+
+                console.error(
+                    error
+                );
 
                 return;
 
             }
 
 
-            data.forEach(
+            /*
+                Reverse so oldest of the selected
+                messages gets rendered first.
+            */
 
-                pop => {
+            data
+                .slice()
+                .reverse()
+                .forEach(
 
-                    renderMessage({
+                    function(pop) {
 
-                        id:
-                            pop.id,
+                        renderMessage({
 
+                            id:
+                                pop.id,
 
-                        text:
-                            pop.text,
+                            text:
+                                pop.text,
 
+                            xPercent:
+                                pop.x_percent,
 
-                        xPercent:
-                            pop.x_percent,
+                            yPercent:
+                                pop.y_percent,
 
+                            bold:
+                                pop.bold,
 
-                        yPercent:
-                            pop.y_percent,
+                            italic:
+                                pop.italic,
 
+                            underline:
+                                pop.underline
 
-                        bold:
-                            pop.bold,
+                        });
 
+                    }
 
-                        italic:
-                            pop.italic,
-
-
-                        underline:
-                            pop.underline
-
-                    });
-
-                }
-
-            );
-
+                );
 
         }
 
 
-        /* ============================================
+        /* =====================================================
            REALTIME
-        ============================================ */
+        ===================================================== */
 
         function startRealtime() {
-
 
             realtimeChannel =
                 supabaseClient
@@ -1908,6 +2164,11 @@ async function loadAdminFunctions() {
 
             realtimeChannel
 
+
+                /* =================================================
+                   NEW MESSAGE
+                ================================================= */
+
                 .on(
 
                     "postgres_changes",
@@ -1925,8 +2186,7 @@ async function loadAdminFunctions() {
 
                     },
 
-                    payload => {
-
+                    function(payload) {
 
                         const pop =
                             payload.new;
@@ -1957,11 +2217,58 @@ async function loadAdminFunctions() {
 
                         });
 
+                    }
+
+                )
+
+
+                /* =================================================
+                   MOVEMENT
+
+                   THIS WAS MISSING.
+                ================================================= */
+
+                .on(
+
+                    "postgres_changes",
+
+                    {
+
+                        event:
+                            "UPDATE",
+
+                        schema:
+                            "public",
+
+                        table:
+                            "pops"
+
+                    },
+
+                    function(payload) {
+
+                        const pop =
+                            payload.new;
+
+
+                        updateElementPosition(
+
+                            pop.id,
+
+                            pop.x_percent,
+
+                            pop.y_percent
+
+                        );
 
                     }
 
                 )
 
+
+                /* =================================================
+                   DELETE
+                ================================================= */
 
                 .on(
 
@@ -1980,20 +2287,33 @@ async function loadAdminFunctions() {
 
                     },
 
-                    payload => {
+                    function(payload) {
+
+                        const oldMessage =
+                            payload.old;
+
+
+                        if (!oldMessage) {
+
+                            return;
+
+                        }
 
 
                         document
                             .getElementById(
-                                payload.old.id
+                                oldMessage.id
                             )
                             ?.remove();
-
 
                     }
 
                 )
 
+
+                /* =================================================
+                   ADMIN PLUGINS
+                ================================================= */
 
                 .on(
 
@@ -2013,7 +2333,15 @@ async function loadAdminFunctions() {
 
                 .subscribe(
 
-                    status => {
+                    function(status) {
+
+                        console.log(
+
+                            "Realtime:",
+
+                            status
+
+                        );
 
 
                         if (
@@ -2021,25 +2349,32 @@ async function loadAdminFunctions() {
                             "SUBSCRIBED"
                         ) {
 
-
                             connectionStatus.innerText =
                                 "● LIVE";
 
-
                         }
 
+
+                        if (
+                            status ===
+                            "CHANNEL_ERROR"
+                        ) {
+
+                            connectionStatus.innerText =
+                                "Realtime error";
+
+                        }
 
                     }
 
                 );
 
-
         }
 
 
-        /* ============================================
-           ENTER KEYS
-        ============================================ */
+        /* =====================================================
+           ENTER
+        ===================================================== */
 
         input.addEventListener(
 
@@ -2047,80 +2382,114 @@ async function loadAdminFunctions() {
 
             function(event) {
 
-
                 if (
                     event.key ===
                     "Enter"
                 ) {
 
-
                     event.preventDefault();
-
 
                     sendMessage();
 
-
                 }
-
 
             }
 
         );
 
 
-        adminCommandInput
-            .addEventListener(
+        adminCommandInput.addEventListener(
 
-                "keydown",
+            "keydown",
 
-                function(event) {
+            function(event) {
 
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
 
-                    if (
-                        event.key ===
-                        "Enter"
-                    ) {
+                    event.preventDefault();
 
-
-                        runAdminCommand();
-
-
-                    }
-
+                    runAdminCommand();
 
                 }
 
-            );
+            }
+
+        );
 
 
-        adminValueInput
-            .addEventListener(
+        adminValueInput.addEventListener(
 
-                "keydown",
+            "keydown",
 
-                function(event) {
+            function(event) {
 
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
 
-                    if (
-                        event.key ===
-                        "Enter"
-                    ) {
+                    event.preventDefault();
 
-
-                        runAdminCommand();
-
-
-                    }
-
+                    runAdminCommand();
 
                 }
 
-            );
+            }
+
+        );
 
 
-        /* ============================================
-           EXPOSE FUNCTIONS USED BY HTML BUTTONS
-        ============================================ */
+        /* =====================================================
+           WINDOW RESIZE
+        ===================================================== */
+
+        window.addEventListener(
+
+            "resize",
+
+            function() {
+
+                document
+                    .querySelectorAll(
+                        ".popped-msg"
+                    )
+                    .forEach(
+
+                        function(element) {
+
+                            updateElementPosition(
+
+                                element.id,
+
+                                Number(
+                                    element
+                                        .dataset
+                                        .xPercent
+                                ),
+
+                                Number(
+                                    element
+                                        .dataset
+                                        .yPercent
+                                )
+
+                            );
+
+                        }
+
+                    );
+
+            }
+
+        );
+
+
+        /* =====================================================
+           HTML FUNCTIONS
+        ===================================================== */
 
         window.toggleStyle =
             toggleStyle;
@@ -2138,24 +2507,52 @@ async function loadAdminFunctions() {
             closeAdmin;
 
 
-        /* ============================================
+        /* =====================================================
            START
-        ============================================ */
+        ===================================================== */
 
         async function startApp() {
 
+            if (
+                !initializeSupabase()
+            ) {
 
-            initializeSupabase();
+                return;
+
+            }
 
 
-            await loadAdminFunctions();
+            connectionStatus.innerText =
+                "Loading wall...";
 
+
+            /*
+                First clean up old messages already
+                sitting in Supabase.
+            */
+
+            await trimOldMessages();
+
+
+            /*
+                Then load newest 10.
+            */
 
             await loadMessages();
 
 
+            /*
+                Then realtime.
+            */
+
             startRealtime();
 
+
+            /*
+                Load admin plugin files.
+            */
+
+            await loadAdminFunctions();
 
         }
 
